@@ -5,9 +5,12 @@
 
 class Creature : public Entity
 {
+	protected:
+
+		Creature(string name, string description, EntityType entityType, Room* room);
+
 	public:
 
-		Creature(string name, string description, Room* room);
 		virtual ~Creature();
 
 		Room* getRoom();

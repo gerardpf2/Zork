@@ -30,7 +30,7 @@ Room* Exit::getOtherRoom(Room* currentRoom)
 
 DirectionType Exit::getDirectionType(Room* currentRoom)
 {
-	if (getOrigin() == currentRoom) return directionTypeOriginToDestination;
-	if (getDestination() == currentRoom) return directionTypeDestinationToOrigin;
+	if(getOrigin() == currentRoom) return directionTypeOriginToDestination;
+	if(getDestination() == currentRoom) return directionTypeDestinationToOrigin;
 	return VOID; // There is no connection between this and currentRoom
 }

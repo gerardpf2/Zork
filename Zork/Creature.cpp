@@ -1,7 +1,7 @@
 #include "Creature.h"
 
-Creature::Creature(string name, string description, Room* room) :
-	Entity(name, description, CREATURE, room)
+Creature::Creature(string name, string description, EntityType entityType, Room* room) :
+	Entity(name, description, entityType, room)
 {
 
 }

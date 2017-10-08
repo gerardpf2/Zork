@@ -7,7 +7,6 @@ class Player : public Creature
 {
 	public:
 
-		// EntityType PLAYER
 		Player(string name, string description, Room* room);
 		virtual ~Player();
 };

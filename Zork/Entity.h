@@ -8,11 +8,11 @@ using namespace std;
 
 enum EntityType
 {
+	NPC,
 	ITEM,
 	EXIT,
 	ROOM,
 	PLAYER,
-	CREATURE,
 };
 
 class Entity
@@ -33,6 +33,8 @@ class Entity
 
 		Entity* getParent();
 
+		void updateParent(Entity* newParent);
+
 		void addEntity(Entity* entity);
 
 	private:
@@ -43,6 +45,8 @@ class Entity
 		Entity* parent;
 
 		list<Entity*> entities;
+
+		void removeEntity(Entity* entity);
 };
 
 #endif

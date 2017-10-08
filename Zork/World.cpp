@@ -15,6 +15,7 @@ World::World()
 	Item* itemA = new Item("ItemA", "... description itemA ...", roomA);
 	Item* itemB = new Item("ItemB", "... description itemB ...", roomA);
 	Item* itemC = new Item("ItemC", "... description itemC ...", roomA);
+	Item* itemD = new Item("ItemD", "... description itemD ...", itemC);
 
 	rooms.push_back(roomA);
 	rooms.push_back(roomB);
@@ -25,5 +26,7 @@ World::World()
 
 World::~World()
 {
+	for(list<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it) delete *it;
 
+	rooms.clear();
 }
