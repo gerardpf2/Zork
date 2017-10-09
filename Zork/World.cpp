@@ -9,8 +9,10 @@ World::World()
 	Room* roomB = new Room("RoomB", "... description roomB ...");
 	Room* roomC = new Room("RoomC", "... description roomC ...");
 
-	Exit* exitAB = new Exit(EAST, WEST, "... description exitAB ...", roomA, roomB);
-	Exit* exitAC = new Exit(WEST, EAST, "... description exitAC ...", roomA, roomC);
+	Exit* exitAB = new Exit(EAST, "... description exitAB ...", roomA, roomB);
+	Exit* exitBA = new Exit(WEST, "... description exitBA ...", roomB, roomA);
+	Exit* exitAC = new Exit(WEST, "... description exitAC ...", roomA, roomC);
+	Exit* exitCA = new Exit(EAST, "... description exitCA ...", roomC, roomA);
 
 	Item* itemA = new Item("ItemA", "... description itemA ...", roomA);
 	Item* itemB = new Item("ItemB", "... description itemB ...", roomA);
@@ -29,4 +31,9 @@ World::~World()
 	for(list<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it) delete *it;
 
 	rooms.clear();
+}
+
+Player* World::getPlayer()
+{
+	return player;
 }

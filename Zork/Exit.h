@@ -5,7 +5,6 @@
 
 enum DirectionType
 {
-	VOID,
 	EAST,
 	WEST,
 	NORTH,
@@ -16,21 +15,18 @@ class Exit : public Entity
 {
 	public:
 
-		Exit(DirectionType directionTypeOriginToDestination, DirectionType directionTypeDestinationToOrigin, string description, Room* origin, Room* destination);
+		Exit(DirectionType directionType, string description, Room* origin, Room* destination);
 		virtual ~Exit();
 
 		Room* getOrigin();
 
 		Room* getDestination();
 
-		Room* getOtherRoom(Room* currentRoom);
-
-		DirectionType getDirectionType(Room* currentRoom);
+		DirectionType getDirectionType();
 
 	private:
 
-		DirectionType directionTypeOriginToDestination;
-		DirectionType directionTypeDestinationToOrigin;
+		DirectionType directionType;
 		Room* destination;
 };
 

@@ -1,11 +1,10 @@
 #include "World.h"
-#include <iostream>
-
-using namespace std;
+#include "CommandListener.h"
 
 int main()
 {
-	cout << "Hello!" << endl;
-
 	World world;
+	CommandListener commandListener(world.getPlayer());
+
+	commandListener.start();
 }

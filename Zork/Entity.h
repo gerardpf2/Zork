@@ -2,6 +2,7 @@
 #define _Entity_
 
 #include <list>
+#include <vector>
 #include <string>
 
 using namespace std;
@@ -35,7 +36,15 @@ class Entity
 
 		void updateParent(Entity* newParent);
 
+		Entity* getEntity(EntityType entityType, string name);
+
+		list<Entity*>* getAllEntities(EntityType entityType);
+
 		void addEntity(Entity* entity);
+
+		// --- Actions ---
+
+		virtual void look(vector<string>& tokens);
 
 	private:
 
@@ -44,7 +53,7 @@ class Entity
 		EntityType entityType;
 		Entity* parent;
 
-		list<Entity*> entities;
+		vector<list<Entity*>> entities;
 
 		void removeEntity(Entity* entity);
 };

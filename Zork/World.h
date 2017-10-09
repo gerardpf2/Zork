@@ -12,6 +12,8 @@ class World
 		World();
 		~World();
 
+		Player* getPlayer();
+
 	private:
 
 		Player* player;

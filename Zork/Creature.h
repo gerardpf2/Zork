@@ -14,6 +14,10 @@ class Creature : public Entity
 		virtual ~Creature();
 
 		Room* getRoom();
+
+		// --- Actions ---
+
+		virtual void look(vector<string>& tokens);
 };
 
 #endif

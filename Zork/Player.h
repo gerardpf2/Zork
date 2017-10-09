@@ -9,6 +9,10 @@ class Player : public Creature
 
 		Player(string name, string description, Room* room);
 		virtual ~Player();
+
+		// --- Actions ---
+
+		void look(vector<string>& tokens);
 };
 
 #endif

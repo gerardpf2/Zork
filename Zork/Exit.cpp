@@ -1,9 +1,9 @@
 #include "Exit.h"
 
-Exit::Exit(DirectionType directionTypeOriginToDestination, DirectionType directionTypeDestinationToOrigin, string description, Room* origin, Room* destination) :
-	Entity("", description, EXIT, origin), directionTypeOriginToDestination(directionTypeOriginToDestination), directionTypeDestinationToOrigin(directionTypeDestinationToOrigin), destination(destination)
+Exit::Exit(DirectionType directionType, string description, Room* origin, Room* destination) :
+	Entity("", description, EXIT, origin), directionType(directionType), destination(destination)
 {
-	destination->addEntity(this);
+
 }
 
 Exit::~Exit()
@@ -21,16 +21,7 @@ Room* Exit::getDestination()
 	return destination;
 }
 
-Room* Exit::getOtherRoom(Room* currentRoom)
+DirectionType Exit::getDirectionType()
 {
-	if(getOrigin() == currentRoom) return getDestination();
-	if(getDestination() == currentRoom) return getOrigin();
-	return NULL; // There is no connection between this and currentRoom
-}
-
-DirectionType Exit::getDirectionType(Room* currentRoom)
-{
-	if(getOrigin() == currentRoom) return directionTypeOriginToDestination;
-	if(getDestination() == currentRoom) return directionTypeDestinationToOrigin;
-	return VOID; // There is no connection between this and currentRoom
+	return directionType;
 }
