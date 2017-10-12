@@ -17,12 +17,6 @@ enum class EntityType
 
 class Entity
 {
-	protected:
-
-		Entity(const char* name, const char* description, EntityType entityType, Entity* const parent);
-
-		virtual void onUpdate();
-
 	public:
 
 		virtual ~Entity();
@@ -33,21 +27,31 @@ class Entity
 
 		EntityType getEntityType() const;
 
-		Entity* getParent() const;
+		const Entity* getParent() const;
 
-		void assignNewParent(Entity* const newParent);
+		void assignNewParent(Entity* newParent);
 
-		Entity* getEntity(EntityType entityType, const char* name) const;
+		const Entity* getEntity(EntityType entityType, const char* name) const;
 
 		const list<Entity*>* getAllEntities(EntityType entityType) const;
 
-		void addEntity(Entity* const entity);
+		void addEntity(Entity* entity);
 
 		void update();
 
 		// --- Actions ---
 
 		virtual bool look(const vector<string>& tokens) const;
+
+	protected:
+
+		Entity(const char* name, const char* description, EntityType entityType, Entity* parent);
+
+		virtual void onUpdate();
+
+	private:
+
+		void removeEntity(Entity* entity);
 
 	private:
 
@@ -60,10 +64,6 @@ class Entity
 		Entity* parent = nullptr;
 
 		vector<list<Entity*>> entities;
-
-	private:
-
-		void removeEntity(Entity* const entity);
 };
 
 #endif

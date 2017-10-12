@@ -3,21 +3,21 @@
 #include "Room.h"
 #include <assert.h>
 
-Exit::Exit(DirectionType directionType, const char* description, Room* const origin, Room* const destination) :
+Exit::Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination) :
 	Entity("", description, EntityType::EXIT, origin), directionType(directionType), destination(destination)
 { }
 
 Exit::~Exit()
 { }
 
-Room* Exit::getOrigin() const
+const Room* Exit::getOrigin() const
 {
 	assert(getParent());
 
 	return (Room*)getParent();
 }
 
-Room* Exit::getDestination() const
+const Room* Exit::getDestination() const
 {
 	return destination;
 }

@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* const parent) :
+Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* parent) :
 	name(name), description(description), entityType(entityType)
 {
 	entities.resize(5); // 5 different entity types
@@ -38,15 +38,13 @@ EntityType Entity::getEntityType() const
 	return entityType;
 }
 
-Entity* Entity::getParent() const
+const Entity* Entity::getParent() const
 {
 	return parent;
 }
 
-void Entity::assignNewParent(Entity* const newParent)
+void Entity::assignNewParent(Entity* newParent)
 {
-	assert(newParent);
-
 	if(parent) parent->removeEntity(this);
 
 	parent = newParent;
@@ -54,7 +52,7 @@ void Entity::assignNewParent(Entity* const newParent)
 	if(parent) parent->addEntity(this);
 }
 
-Entity* Entity::getEntity(EntityType entityType, const char* name) const
+const Entity* Entity::getEntity(EntityType entityType, const char* name) const
 {
 	const list<Entity*>* allEntities = getAllEntities(entityType);
 
@@ -66,23 +64,23 @@ Entity* Entity::getEntity(EntityType entityType, const char* name) const
 
 const list<Entity*>* Entity::getAllEntities(EntityType entityType) const
 {
-	assert((int)entityType < entities.size());
+	assert((unsigned int)entityType < entities.size());
 
-	return &entities[(int)entityType];
+	return &entities[(unsigned int)entityType];
 }
 
-void Entity::addEntity(Entity* const entity)
+void Entity::addEntity(Entity* entity)
 {
-	assert((int)entity->getEntityType() < entities.size());
+	assert((unsigned int)entity->getEntityType() < entities.size());
 
-	entities[(int)entity->getEntityType()].push_back(entity);
+	entities[(unsigned int)entity->getEntityType()].push_back(entity);
 }
 
-void Entity::removeEntity(Entity* const entity)
+void Entity::removeEntity(Entity* entity)
 {
-	assert((int)entity->getEntityType() < entities.size());
+	assert((unsigned int)entity->getEntityType() < entities.size());
 
-	entities[(int)entity->getEntityType()].remove(entity);
+	entities[(unsigned int)entity->getEntityType()].remove(entity);
 }
 
 void Entity::update()

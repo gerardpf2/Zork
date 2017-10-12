@@ -17,13 +17,13 @@ class Exit : public Entity
 {
 	public:
 
-		Exit(DirectionType directionType, const char* description, Room* const origin, Room* const destination);
+		Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination);
 		
 		virtual ~Exit();
 
-		Room* getOrigin() const;
+		const Room* getOrigin() const;
 
-		Room* getDestination() const;
+		const Room* getDestination() const;
 
 		DirectionType getDirectionType() const;
 
@@ -31,7 +31,7 @@ class Exit : public Entity
 
 		DirectionType directionType;
 
-		Room* destination = nullptr;
+		const Room* destination = nullptr;
 };
 
 #endif

@@ -16,7 +16,7 @@ class World
 
 		~World();
 
-		Player* getPlayer() const;
+		const Player* getPlayer() const;
 
 		void update() const;
 

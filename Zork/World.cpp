@@ -36,7 +36,7 @@ World::~World()
 	rooms.clear();
 }
 
-Player* World::getPlayer() const
+const Player* World::getPlayer() const
 {
 	return player;
 }

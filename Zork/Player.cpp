@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(const char* name, const char* description, Room* const room) :
+Player::Player(const char* name, const char* description, Room* room) :
 	Creature(name, description, EntityType::PLAYER, room)
 { }
 

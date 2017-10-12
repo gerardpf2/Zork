@@ -7,19 +7,19 @@ class Room;
 
 class Creature : public Entity
 {
-	protected:
-
-		Creature(const char* name, const char* description, EntityType entityType, Room* const room);
-
 	public:
 
 		virtual ~Creature();
 
-		Room* getRoom() const;
+		const Room* getRoom() const;
 
 		// --- Actions ---
 
 		virtual bool look(const vector<string>& tokens) const override;
+
+	protected:
+
+		Creature(const char* name, const char* description, EntityType entityType, Room* room);
 };
 
 #endif

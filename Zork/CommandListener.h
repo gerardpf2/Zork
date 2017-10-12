@@ -12,7 +12,7 @@ class CommandListener
 {
 	public:
 
-		CommandListener(Player* const player);
+		CommandListener(const Player* player);
 
 		~CommandListener();
 
@@ -28,7 +28,7 @@ class CommandListener
 
 	private:
 
-		Player* player = nullptr;
+		const Player* player = nullptr;
 
 		string playerInput;
 };

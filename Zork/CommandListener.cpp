@@ -6,7 +6,7 @@
 #include <assert.h>
 #include "Player.h"
 
-CommandListener::CommandListener(Player* const player) :
+CommandListener::CommandListener(const Player* player) :
 	player(player)
 { }
 

@@ -3,14 +3,14 @@
 #include "Room.h"
 #include <assert.h>
 
-Creature::Creature(const char* name, const char* description, EntityType entityType, Room* const room) :
+Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room) :
 	Entity(name, description, entityType, room)
 { }
 
 Creature::~Creature()
 { }
 
-Room* Creature::getRoom() const
+const Room* Creature::getRoom() const
 {
 	assert(getParent());
 
