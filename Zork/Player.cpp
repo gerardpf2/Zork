@@ -1,21 +1,19 @@
 #include "Player.h"
 
-#include <iostream>
-
-Player::Player(string name, string description, Room* room) :
-	Creature(name, description, PLAYER, room)
-{
-
-}
+Player::Player(const char* name, const char* description, Room* const room) :
+	Creature(name, description, EntityType::PLAYER, room)
+{ }
 
 Player::~Player()
-{
-
-}
+{ }
 
 // --- Actions ---
 
-void Player::look(vector<string>& tokens)
+#include <iostream>
+
+bool Player::look(const vector<string>& tokens) const
 {
 	cout << "Player::look" << endl;
+
+	return true;
 }

@@ -1,26 +1,29 @@
 #include "Creature.h"
 
-#include <iostream>
+#include "Room.h"
+#include <assert.h>
 
-Creature::Creature(string name, string description, EntityType entityType, Room* room) :
+Creature::Creature(const char* name, const char* description, EntityType entityType, Room* const room) :
 	Entity(name, description, entityType, room)
-{
-
-}
+{ }
 
 Creature::~Creature()
-{
+{ }
 
-}
-
-Room* Creature::getRoom()
+Room* Creature::getRoom() const
 {
+	assert(getParent());
+
 	return (Room*)getParent();
 }
 
 // --- Actions ---
 
-void Creature::look(vector<string>& tokens)
+#include <iostream>
+
+bool Creature::look(const vector<string>& tokens) const
 {
 	cout << "Creature::look" << endl;
+
+	return true;
 }

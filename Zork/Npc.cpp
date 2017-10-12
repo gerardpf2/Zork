@@ -1,12 +1,8 @@
 #include "Npc.h"
 
-Npc::Npc(string name, string description, Room* room) :
-	Creature(name, description, NPC, room)
-{
-
-}
+Npc::Npc(const char* name, const char* description, Room* const room) :
+	Creature(name, description, EntityType::NPC, room)
+{ }
 
 Npc::~Npc()
-{
-
-}
+{ }

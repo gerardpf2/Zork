@@ -1,27 +1,28 @@
 #include "Exit.h"
 
-Exit::Exit(DirectionType directionType, string description, Room* origin, Room* destination) :
-	Entity("", description, EXIT, origin), directionType(directionType), destination(destination)
-{
+#include "Room.h"
+#include <assert.h>
 
-}
+Exit::Exit(DirectionType directionType, const char* description, Room* const origin, Room* const destination) :
+	Entity("", description, EntityType::EXIT, origin), directionType(directionType), destination(destination)
+{ }
 
 Exit::~Exit()
-{
+{ }
 
-}
-
-Room* Exit::getOrigin()
+Room* Exit::getOrigin() const
 {
+	assert(getParent());
+
 	return (Room*)getParent();
 }
 
-Room* Exit::getDestination()
+Room* Exit::getDestination() const
 {
 	return destination;
 }
 
-DirectionType Exit::getDirectionType()
+DirectionType Exit::getDirectionType() const
 {
 	return directionType;
 }

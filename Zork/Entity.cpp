@@ -1,13 +1,13 @@
 #include "Entity.h"
 
-#include <iostream>
+#include <assert.h>
 
-Entity::Entity(string name, string description, EntityType entityType, Entity* parent) :
+Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* const parent) :
 	name(name), description(description), entityType(entityType)
 {
-	entities.resize(5); // EntityType amount
+	entities.resize(5); // 5 different entity types
 
-	updateParent(parent);
+	assignNewParent(parent);
 }
 
 Entity::~Entity()
@@ -23,28 +23,30 @@ Entity::~Entity()
 	entities.clear();
 }
 
-string Entity::getName()
+const char* Entity::getName() const
 {
 	return name;
 }
 
-string Entity::getDescription()
+const char* Entity::getDescription() const
 {
 	return description;
 }
 
-EntityType Entity::getEntityType()
+EntityType Entity::getEntityType() const
 {
 	return entityType;
 }
 
-Entity* Entity::getParent()
+Entity* Entity::getParent() const
 {
 	return parent;
 }
 
-void Entity::updateParent(Entity* newParent)
+void Entity::assignNewParent(Entity* const newParent)
 {
+	assert(newParent);
+
 	if(parent) parent->removeEntity(this);
 
 	parent = newParent;
@@ -52,34 +54,58 @@ void Entity::updateParent(Entity* newParent)
 	if(parent) parent->addEntity(this);
 }
 
-Entity* Entity::getEntity(EntityType entityType, string name)
+Entity* Entity::getEntity(EntityType entityType, const char* name) const
 {
-	list<Entity*>* allEntities = getAllEntities(entityType);
+	const list<Entity*>* allEntities = getAllEntities(entityType);
 
-	for(list<Entity*>::iterator it = allEntities->begin(); it != allEntities->end(); ++it)
+	for(list<Entity*>::const_iterator it = allEntities->begin(); it != allEntities->end(); ++it)
 		if((*it)->name == name) return *it;
 
-	return NULL;
+	return nullptr;
 }
 
-list<Entity*>* Entity::getAllEntities(EntityType entityType)
+const list<Entity*>* Entity::getAllEntities(EntityType entityType) const
 {
-	return &entities[entityType];
+	assert((int)entityType < entities.size());
+
+	return &entities[(int)entityType];
 }
 
-void Entity::addEntity(Entity* entity)
+void Entity::addEntity(Entity* const entity)
 {
-	entities[entity->getEntityType()].push_back(entity);
+	assert((int)entity->getEntityType() < entities.size());
+
+	entities[(int)entity->getEntityType()].push_back(entity);
 }
 
-void Entity::removeEntity(Entity* entity)
+void Entity::removeEntity(Entity* const entity)
 {
-	entities[entity->getEntityType()].remove(entity);
+	assert((int)entity->getEntityType() < entities.size());
+
+	entities[(int)entity->getEntityType()].remove(entity);
 }
+
+void Entity::update()
+{
+	onUpdate();
+
+	for(unsigned int i = 0; i < entities.size(); ++i)
+	{
+		for(list<Entity*>::iterator it = entities[i].begin(); it != entities[i].end(); ++it)
+			if(*it) (*it)->update();
+	}
+}
+
+void Entity::onUpdate()
+{ }
 
 // --- Actions ---
 
-void Entity::look(vector<string>& tokens)
+#include <iostream>
+
+bool Entity::look(const vector<string>& tokens) const
 {
 	cout << "Entity::look" << endl;
+
+	return true;
 }

@@ -1,0 +1,21 @@
+const
+	parametres
+	funcions
+
+private, public, protected
+	funcions
+	variables
+
+NULL, nullptr
+
+include, class
+
+{ }
+
+assert
+
+override
+
+enum class
+
+switch

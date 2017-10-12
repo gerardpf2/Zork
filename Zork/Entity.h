@@ -3,11 +3,10 @@
 
 #include <list>
 #include <vector>
-#include <string>
 
 using namespace std;
 
-enum EntityType
+enum class EntityType
 {
 	NPC,
 	ITEM,
@@ -20,42 +19,51 @@ class Entity
 {
 	protected:
 
-		Entity(string name, string description, EntityType entityType, Entity* parent);
+		Entity(const char* name, const char* description, EntityType entityType, Entity* const parent);
+
+		virtual void onUpdate();
 
 	public:
 
 		virtual ~Entity();
 
-		string getName();
+		const char* getName() const;
 
-		string getDescription();
+		const char* getDescription() const;
 
-		EntityType getEntityType();
+		EntityType getEntityType() const;
 
-		Entity* getParent();
+		Entity* getParent() const;
 
-		void updateParent(Entity* newParent);
+		void assignNewParent(Entity* const newParent);
 
-		Entity* getEntity(EntityType entityType, string name);
+		Entity* getEntity(EntityType entityType, const char* name) const;
 
-		list<Entity*>* getAllEntities(EntityType entityType);
+		const list<Entity*>* getAllEntities(EntityType entityType) const;
 
-		void addEntity(Entity* entity);
+		void addEntity(Entity* const entity);
+
+		void update();
 
 		// --- Actions ---
 
-		virtual void look(vector<string>& tokens);
+		virtual bool look(const vector<string>& tokens) const;
 
 	private:
 
-		string name;
-		string description;
+		const char* name;
+
+		const char* description;
+
 		EntityType entityType;
-		Entity* parent;
+
+		Entity* parent = nullptr;
 
 		vector<list<Entity*>> entities;
 
-		void removeEntity(Entity* entity);
+	private:
+
+		void removeEntity(Entity* const entity);
 };
 
 #endif

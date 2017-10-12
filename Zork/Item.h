@@ -7,7 +7,8 @@ class Item : public Entity
 {
 	public:
 
-		Item(string name, string description, Entity* parent);
+		Item(const char* name, const char* description, Entity* const parent);
+
 		virtual ~Item();
 };
 

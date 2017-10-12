@@ -1,9 +1,9 @@
 #ifndef _Exit_
 #define _Exit_
 
-#include "Room.h"
+#include "Entity.h"
 
-enum DirectionType
+enum class DirectionType
 {
 	EAST,
 	WEST,
@@ -11,23 +11,27 @@ enum DirectionType
 	SOUTH,
 };
 
+class Room;
+
 class Exit : public Entity
 {
 	public:
 
-		Exit(DirectionType directionType, string description, Room* origin, Room* destination);
+		Exit(DirectionType directionType, const char* description, Room* const origin, Room* const destination);
+		
 		virtual ~Exit();
 
-		Room* getOrigin();
+		Room* getOrigin() const;
 
-		Room* getDestination();
+		Room* getDestination() const;
 
-		DirectionType getDirectionType();
+		DirectionType getDirectionType() const;
 
 	private:
 
 		DirectionType directionType;
-		Room* destination;
+
+		Room* destination = nullptr;
 };
 
 #endif

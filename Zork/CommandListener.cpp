@@ -1,48 +1,52 @@
 #include "CommandListener.h"
 
+#include <conio.h>
 #include <sstream>
 #include <iostream>
+#include <assert.h>
+#include "Player.h"
 
-CommandListener::CommandListener(Player* player) :
+CommandListener::CommandListener(Player* const player) :
 	player(player)
-{
-
-}
+{ }
 
 CommandListener::~CommandListener()
-{
+{ }
 
+void CommandListener::listen(bool& stop)
+{
+	if(_kbhit())
+	{
+		char key = _getch();
+
+		if(key == '\b' && !playerInput.empty())
+		{
+			cout << "\b \b";
+			playerInput.pop_back();
+		}
+		else if(key != '\r')
+		{
+			cout << key;
+			playerInput += key;
+		}
+		else
+		{
+			cout << endl;
+			if(!process(playerInput, stop)) cout << ". . ." << endl;
+			playerInput = "";
+		}
+	}
 }
 
-void CommandListener::start()
+bool CommandListener::process(const string& command, bool& stop) const
 {
-	cout << "CommandListener START" << endl;
-
-	string initialCommand = "look";
-	processCommand(initialCommand);
-
-	string command;
-	while(!stopListening && getline(cin, command)) processCommand(command);
-}
-
-void CommandListener::stop()
-{
-	cout << "CommandListener STOP" << endl;
-
-	stopListening = true;
-}
-
-void CommandListener::processCommand(string& command)
-{
-	cout << "Command: " << command << endl;
-
 	vector<string> tokens;
-	splitCommand(command, tokens);
+	split(command, tokens);
 
-	resolveCommand(tokens);
+	return resolve(tokens, stop);
 }
 
-void CommandListener::splitCommand(string& command, vector<string>& tokens)
+void CommandListener::split(const string& command, vector<string>& tokens) const
 {
 	string token;
 	stringstream commandTokens(command);
@@ -50,12 +54,16 @@ void CommandListener::splitCommand(string& command, vector<string>& tokens)
 	while(getline(commandTokens, token, ' ')) tokens.push_back(token);
 }
 
-void CommandListener::resolveCommand(vector<string>& tokens)
+bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 {
-	if(tokens.empty()) return;
+	assert(player);
+
+	if(tokens.empty()) return false;
 
 	string action = tokens[0];
 
-	if(action == "quit" || action == "q") stop();
-	else if(action == "look" || action == "l") player->look(tokens);
+	if(action == "quit" || action == "q") stop = true;
+	else if(action == "look" || action == "l") return player->look(tokens);
+
+	return false;
 }

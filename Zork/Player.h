@@ -7,12 +7,13 @@ class Player : public Creature
 {
 	public:
 
-		Player(string name, string description, Room* room);
+		Player(const char* name, const char* description, Room* const room);
+		
 		virtual ~Player();
 
 		// --- Actions ---
 
-		void look(vector<string>& tokens);
+		bool look(const vector<string>& tokens) const override;
 };
 
 #endif

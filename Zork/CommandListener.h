@@ -2,29 +2,35 @@
 #define _CommandListener_
 
 #include <vector>
-#include "Player.h"
+#include <string>
+
+using namespace std;
+
+class Player;
 
 class CommandListener
 {
 	public:
 
-		CommandListener(Player* player);
+		CommandListener(Player* const player);
+
 		~CommandListener();
 
-		void start();
+		void listen(bool& stop);
+
+		bool process(const string& command, bool& stop) const;
 
 	private:
 
-		Player* player;
-		bool stopListening = false;
+		void split(const string& command, vector<string>& tokens) const;
 
-		void stop();
+		bool resolve(const vector<string>& tokens, bool& stop) const;
 
-		void processCommand(string& command);
+	private:
 
-		void splitCommand(string& command, vector<string>& tokens);
+		Player* player = nullptr;
 
-		void resolveCommand(vector<string>& tokens);
+		string playerInput;
 };
 
 #endif

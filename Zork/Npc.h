@@ -7,7 +7,8 @@ class Npc : public Creature
 {
 	public:
 
-		Npc(string name, string description, Room* room);
+		Npc(const char* name, const char* description, Room* const room);
+		
 		virtual ~Npc();
 };
 

@@ -1,23 +1,25 @@
 #ifndef _Creature_
 #define _Creature_
 
-#include "Room.h"
+#include "Entity.h"
+
+class Room;
 
 class Creature : public Entity
 {
 	protected:
 
-		Creature(string name, string description, EntityType entityType, Room* room);
+		Creature(const char* name, const char* description, EntityType entityType, Room* const room);
 
 	public:
 
 		virtual ~Creature();
 
-		Room* getRoom();
+		Room* getRoom() const;
 
 		// --- Actions ---
 
-		virtual void look(vector<string>& tokens);
+		virtual bool look(const vector<string>& tokens) const override;
 };
 
 #endif

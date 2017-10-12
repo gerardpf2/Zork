@@ -2,23 +2,29 @@
 #define _World_
 
 #include <list>
-#include "Room.h"
-#include "Player.h"
+
+using namespace std;
+
+class Room;
+class Player;
 
 class World
 {
 	public:
 
 		World();
+
 		~World();
 
-		Player* getPlayer();
+		Player* getPlayer() const;
+
+		void update() const;
 
 	private:
 
-		Player* player;
-		list<Room*> rooms;
+		Player* player = nullptr;
 
+		list<Room*> rooms;
 };
 
 #endif

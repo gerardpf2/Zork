@@ -1,12 +1,8 @@
 #include "Room.h"
 
-Room::Room(string name, string description) :
-	Entity(name, description, ROOM, NULL)
-{
-
-}
+Room::Room(const char* name, const char* description) :
+	Entity(name, description, EntityType::ROOM, nullptr)
+{ }
 
 Room::~Room()
-{
-
-}
+{ }

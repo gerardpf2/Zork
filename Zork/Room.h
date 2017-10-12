@@ -7,7 +7,8 @@ class Room : public Entity
 {
 	public:
 
-		Room(string name, string description);
+		Room(const char* name, const char* description);
+
 		virtual ~Room();
 };
 
