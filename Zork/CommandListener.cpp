@@ -8,10 +8,14 @@
 
 CommandListener::CommandListener(const Player* player) :
 	player(player)
-{ }
+{
+	currentHistoryItem = history.end();
+}
 
 CommandListener::~CommandListener()
-{ }
+{
+	history.clear();
+}
 
 void CommandListener::listen(bool& stop)
 {
@@ -19,20 +23,27 @@ void CommandListener::listen(bool& stop)
 	{
 		char key = _getch();
 
-		if(key == '\b' && !playerInput.empty())
+		if(key == '\b') removeCharacters(1);
+		else if(key == -32)
 		{
-			cout << "\b \b";
-			playerInput.pop_back();
+			key = _getch();
+
+			// Arrow Up
+			if(key == 72) printPreviousHistoryItem();
+			// Arrow Down
+			else if(key == 80) printNextHistoryItem();
 		}
 		else if(key != '\r')
 		{
 			cout << key;
 			playerInput += key;
 		}
-		else
+		else if(playerInput != "")
 		{
 			cout << endl;
 			if(!process(playerInput, stop)) cout << ". . ." << endl;
+			if(history.empty() || (!history.empty() && playerInput != *(--history.end()))) history.push_back(playerInput);
+			currentHistoryItem = history.end();
 			playerInput = "";
 		}
 	}
@@ -57,8 +68,7 @@ void CommandListener::split(const string& command, vector<string>& tokens) const
 bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 {
 	assert(player);
-
-	if(tokens.empty()) return false;
+	assert(!tokens.empty());
 
 	string action = tokens[0];
 
@@ -66,4 +76,37 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 	else if(action == "look" || action == "l") return player->look(tokens);
 
 	return false;
+}
+
+void CommandListener::removeCharacters(unsigned int amount)
+{
+	while(!playerInput.empty() && amount-- > 0)
+	{
+		cout << "\b \b";
+		playerInput.pop_back();
+	}
+}
+
+void CommandListener::printPreviousHistoryItem()
+{
+	if(currentHistoryItem != history.begin())
+	{
+		--currentHistoryItem;
+
+		removeCharacters(playerInput.size());
+
+		cout << (playerInput = *currentHistoryItem);
+	}
+}
+
+void CommandListener::printNextHistoryItem()
+{
+	if(currentHistoryItem != history.end() && currentHistoryItem != --history.end())
+	{
+		++currentHistoryItem;
+
+		removeCharacters(playerInput.size());
+
+		cout << (playerInput = *currentHistoryItem);
+	}
 }

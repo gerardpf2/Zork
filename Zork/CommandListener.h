@@ -1,6 +1,7 @@
 #ifndef _CommandListener_
 #define _CommandListener_
 
+#include <list>
 #include <vector>
 #include <string>
 
@@ -26,11 +27,21 @@ class CommandListener
 
 		bool resolve(const vector<string>& tokens, bool& stop) const;
 
+		void removeCharacters(unsigned int amount);
+
+		void printPreviousHistoryItem();
+
+		void printNextHistoryItem();
+
 	private:
 
 		const Player* player = nullptr;
 
 		string playerInput;
+
+		list<string> history;
+
+		list<string>::iterator currentHistoryItem;
 };
 
 #endif
