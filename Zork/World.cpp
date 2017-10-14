@@ -7,6 +7,8 @@
 
 World::World()
 {
+	lastUpdateTime = clock();
+
 	Room* roomA = new Room("RoomA", "... description roomA ...");
 	Room* roomB = new Room("RoomB", "... description roomB ...");
 	Room* roomC = new Room("RoomC", "... description roomC ...");
@@ -20,20 +22,38 @@ World::World()
 	Item* itemB = new Item("ItemB", "... description itemB ...", roomA);
 	Item* itemC = new Item("ItemC", "... description itemC ...", roomA);
 	Item* itemD = new Item("ItemD", "... description itemD ...", itemC);
-	
-	rooms.push_back(roomA);
-	rooms.push_back(roomB);
-	rooms.push_back(roomC);
 
 	player = new Player("Player", "... description player ...", roomA);
+
+	entities.reserve(12);
+
+	// Rooms 3
+	entities.push_back(roomA);
+	entities.push_back(roomB);
+	entities.push_back(roomC);
+
+	// Exits 4
+	entities.push_back(exitAB);
+	entities.push_back(exitBA);
+	entities.push_back(exitAC);
+	entities.push_back(exitCA);
+
+	// Items 4
+	entities.push_back(itemA);
+	entities.push_back(itemB);
+	entities.push_back(itemC);
+	entities.push_back(itemD);
+
+	// Creatures 1
+	entities.push_back(player);
 }
 
 World::~World()
 {
-	for(list<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it)
-		delete *it;
+	for(unsigned int i = 0; i < entities.size(); ++i)
+		delete entities[i];
 
-	rooms.clear();
+	entities.clear();
 }
 
 const Player* World::getPlayer() const
@@ -41,8 +61,13 @@ const Player* World::getPlayer() const
 	return player;
 }
 
-void World::update() const
+void World::update()
 {
-	for(list<Room*>::const_iterator it = rooms.begin(); it != rooms.end(); ++it)
-		if(*it) (*it)->update();
+	clock_t currentUpdateTime = clock();
+	clock_t msDeltaTime = currentUpdateTime - lastUpdateTime;
+
+	for(unsigned int i = 0; i < entities.size(); ++i)
+		if(entities[i]) entities[i]->update(msDeltaTime);
+
+	lastUpdateTime = currentUpdateTime;
 }

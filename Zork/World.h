@@ -1,11 +1,12 @@
 #ifndef _World_
 #define _World_
 
-#include <list>
+#include <vector>
+#include <time.h>
 
 using namespace std;
 
-class Room;
+class Entity;
 class Player;
 
 class World
@@ -18,13 +19,15 @@ class World
 
 		const Player* getPlayer() const;
 
-		void update() const;
+		void update();
 
 	private:
 
 		Player* player = nullptr;
 
-		list<Room*> rooms;
+		vector<Entity*> entities;
+
+		clock_t lastUpdateTime;
 };
 
 #endif

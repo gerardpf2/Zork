@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -31,13 +32,13 @@ class Entity
 
 		void assignNewParent(Entity* newParent);
 
-		const Entity* getEntity(EntityType entityType, const char* name) const;
+		const Entity* getChild(EntityType entityType, const char* name) const;
 
-		const list<Entity*>* getAllEntities(EntityType entityType) const;
+		const list<Entity*>* getAllChildren(EntityType entityType) const;
 
-		void addEntity(Entity* entity);
+		void addChild(Entity* child);
 
-		void update();
+		virtual void update(clock_t msDeltaTime);
 
 		// --- Actions ---
 
@@ -47,11 +48,9 @@ class Entity
 
 		Entity(const char* name, const char* description, EntityType entityType, Entity* parent);
 
-		virtual void onUpdate();
-
 	private:
 
-		void removeEntity(Entity* entity);
+		void removeChild(Entity* child);
 
 	private:
 
@@ -63,7 +62,7 @@ class Entity
 
 		Entity* parent = nullptr;
 
-		vector<list<Entity*>> entities;
+		vector<list<Entity*>> children;
 };
 
 #endif

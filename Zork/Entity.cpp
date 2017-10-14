@@ -5,22 +5,17 @@
 Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* parent) :
 	name(name), description(description), entityType(entityType)
 {
-	entities.resize(5); // 5 different entity types
+	children.resize(5); // 5 different entity types
 
 	assignNewParent(parent);
 }
 
 Entity::~Entity()
 {
-	for(unsigned int i = 0; i < entities.size(); ++i)
-	{
-		for(list<Entity*>::iterator it = entities[i].begin(); it != entities[i].end(); ++it)
-			delete *it;
+	for(unsigned int i = 0; i < children.size(); ++i)
+		children[i].clear();
 
-		entities[i].clear();
-	}
-
-	entities.clear();
+	children.clear();
 }
 
 const char* Entity::getName() const
@@ -45,56 +40,47 @@ const Entity* Entity::getParent() const
 
 void Entity::assignNewParent(Entity* newParent)
 {
-	if(parent) parent->removeEntity(this);
+	if(parent) parent->removeChild(this);
 
 	parent = newParent;
 
-	if(parent) parent->addEntity(this);
+	if(parent) parent->addChild(this);
 }
 
-const Entity* Entity::getEntity(EntityType entityType, const char* name) const
+const Entity* Entity::getChild(EntityType entityType, const char* name) const
 {
-	const list<Entity*>* allEntities = getAllEntities(entityType);
+	const list<Entity*>* allEntities = getAllChildren(entityType);
 
 	for(list<Entity*>::const_iterator it = allEntities->begin(); it != allEntities->end(); ++it)
-		if((*it)->name == name) return *it;
+		if(*it && (*it)->getName() == name) return *it;
 
 	return nullptr;
 }
 
-const list<Entity*>* Entity::getAllEntities(EntityType entityType) const
+const list<Entity*>* Entity::getAllChildren(EntityType entityType) const
 {
-	assert((unsigned int)entityType < entities.size());
+	assert((unsigned int)entityType < children.size());
 
-	return &entities[(unsigned int)entityType];
+	return &children[(unsigned int)entityType];
 }
 
-void Entity::addEntity(Entity* entity)
+void Entity::addChild(Entity* child)
 {
-	assert((unsigned int)entity->getEntityType() < entities.size());
+	assert(child);
+	assert((unsigned int)child->getEntityType() < children.size());
 
-	entities[(unsigned int)entity->getEntityType()].push_back(entity);
+	children[(unsigned int)child->getEntityType()].push_back(child);
 }
 
-void Entity::removeEntity(Entity* entity)
+void Entity::removeChild(Entity* child)
 {
-	assert((unsigned int)entity->getEntityType() < entities.size());
+	assert(child);
+	assert((unsigned int)child->getEntityType() < children.size());
 
-	entities[(unsigned int)entity->getEntityType()].remove(entity);
+	children[(unsigned int)child->getEntityType()].remove(child);
 }
 
-void Entity::update()
-{
-	onUpdate();
-
-	for(unsigned int i = 0; i < entities.size(); ++i)
-	{
-		for(list<Entity*>::iterator it = entities[i].begin(); it != entities[i].end(); ++it)
-			if(*it) (*it)->update();
-	}
-}
-
-void Entity::onUpdate()
+void Entity::update(clock_t msDeltaTime)
 { }
 
 // --- Actions ---
