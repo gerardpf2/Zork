@@ -5,6 +5,9 @@
 Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* parent) :
 	name(name), description(description), entityType(entityType)
 {
+	assert(name);
+	assert(description);
+
 	children.resize(5); // 5 different entity types
 
 	assignNewParent(parent);
@@ -47,12 +50,31 @@ void Entity::assignNewParent(Entity* newParent)
 	if(parent) parent->addChild(this);
 }
 
-const Entity* Entity::getChild(EntityType entityType, const char* name) const
+bool Entity::hasChild(const Entity* child, bool recursive) const
 {
+	assert(child);
+
+	return getChild(child->getEntityType(), child->getName(), recursive) != nullptr;
+}
+
+Entity* Entity::getChild(EntityType entityType, const char* name, bool recursive) const
+{
+	assert(name);
+
 	const list<Entity*>* allEntities = getAllChildren(entityType);
 
 	for(list<Entity*>::const_iterator it = allEntities->begin(); it != allEntities->end(); ++it)
-		if(*it && (*it)->getName() == name) return *it;
+		if((*it)->getName() == name) return *it;
+
+	if(recursive)
+	{
+		for(unsigned int i = 0; i < children.size(); ++i)
+			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
+			{
+				Entity* child = (*it)->getChild(entityType, name, recursive);
+				if(child) return child;
+			}
+	}
 
 	return nullptr;
 }

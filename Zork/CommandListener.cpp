@@ -9,6 +9,8 @@
 CommandListener::CommandListener(const Player* player) :
 	player(player)
 {
+	assert(player);
+
 	currentHistoryItem = history.end();
 }
 
@@ -42,7 +44,7 @@ void CommandListener::listen(bool& stop)
 		{
 			cout << endl;
 			if(!process(playerInput, stop)) cout << ". . ." << endl;
-			if(history.empty() || (!history.empty() && playerInput != *(--history.end()))) history.push_back(playerInput);
+			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
 			currentHistoryItem = history.end();
 			playerInput = "";
 		}

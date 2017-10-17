@@ -1,6 +1,7 @@
 #ifndef _Exit_
 #define _Exit_
 
+#include <set>
 #include "Entity.h"
 
 enum class DirectionType
@@ -9,16 +10,22 @@ enum class DirectionType
 	WEST,
 	NORTH,
 	SOUTH,
+	NORTHEAST,
+	NORTHWEST,
+	SOUTHEAST,
+	SOUTHWEST,
 };
 
 class Room;
+class Item;
+class Player;
 
 class Exit : public Entity
 {
 	public:
 
-		Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination);
-		
+		Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination, const initializer_list<const Item*>& requiredItems = { });
+
 		virtual ~Exit();
 
 		const Room* getOrigin() const;
@@ -27,11 +34,15 @@ class Exit : public Entity
 
 		DirectionType getDirectionType() const;
 
+		void getMissingRequiredItems(const Player* player, list<const Item*>& missingItems) const;
+
 	private:
 
 		DirectionType directionType;
 
 		const Room* destination = nullptr;
+
+		set<const Item*> requiredItems;
 };
 
 #endif

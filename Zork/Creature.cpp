@@ -5,7 +5,9 @@
 
 Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room) :
 	Entity(name, description, entityType, room)
-{ }
+{
+	assert(room);
+}
 
 Creature::~Creature()
 { }

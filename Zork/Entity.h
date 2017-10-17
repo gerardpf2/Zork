@@ -32,11 +32,11 @@ class Entity
 
 		void assignNewParent(Entity* newParent);
 
-		const Entity* getChild(EntityType entityType, const char* name) const;
+		bool hasChild(const Entity* child, bool recursive = false) const;
+
+		Entity* getChild(EntityType entityType, const char* name, bool recursive = false) const;
 
 		const list<Entity*>* getAllChildren(EntityType entityType) const;
-
-		void addChild(Entity* child);
 
 		virtual void update(clock_t msDeltaTime);
 
@@ -49,6 +49,8 @@ class Entity
 		Entity(const char* name, const char* description, EntityType entityType, Entity* parent);
 
 	private:
+
+		void addChild(Entity* child);
 
 		void removeChild(Entity* child);
 
