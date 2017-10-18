@@ -10,6 +10,10 @@ class Room : public Entity
 		Room(const char* name, const char* description);
 
 		virtual ~Room();
+
+		// --- Actions ---
+
+		virtual void look() const override;
 };
 
 #endif

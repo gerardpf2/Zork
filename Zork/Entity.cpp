@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include <assert.h>
+#include <iostream>
 
 Entity::Entity(const char* name, const char* description, EntityType entityType, Entity* parent) :
 	name(name), description(description), entityType(entityType)
@@ -57,6 +58,27 @@ bool Entity::hasChild(const Entity* child, bool recursive) const
 	return getChild(child->getEntityType(), child->getName(), recursive) != nullptr;
 }
 
+Entity* Entity::getChild(const char* name, bool recursive) const
+{
+	assert(name);
+
+	for(unsigned int i = 0; i < children.size(); ++i)
+		for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
+			if(strcmp((*it)->getName(), name) == 0) return *it;
+
+	if(recursive)
+	{
+		for(unsigned int i = 0; i < children.size(); ++i)
+			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
+			{
+				Entity* child = (*it)->getChild(name, recursive);
+				if(child) return child;
+			}
+	}
+
+	return nullptr;
+}
+
 Entity* Entity::getChild(EntityType entityType, const char* name, bool recursive) const
 {
 	assert(name);
@@ -64,7 +86,7 @@ Entity* Entity::getChild(EntityType entityType, const char* name, bool recursive
 	const list<Entity*>* allEntities = getAllChildren(entityType);
 
 	for(list<Entity*>::const_iterator it = allEntities->begin(); it != allEntities->end(); ++it)
-		if((*it)->getName() == name) return *it;
+		if(strcmp((*it)->getName(), name) == 0) return *it;
 
 	if(recursive)
 	{
@@ -107,11 +129,8 @@ void Entity::update(clock_t msDeltaTime)
 
 // --- Actions ---
 
-#include <iostream>
-
-bool Entity::look(const vector<string>& tokens) const
+void Entity::look() const
 {
-	cout << "Entity::look" << endl;
-
-	return true;
+	cout << name << endl;
+	cout << description << endl;
 }

@@ -8,8 +8,8 @@ int main()
 	
 	bool stop = false;
 
-	string initialCommand = "look";
-	commandListener.process(initialCommand, stop);
+	commandListener.process("help", stop);
+	commandListener.process("look", stop);
 
 	while(!stop)
 	{

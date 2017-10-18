@@ -4,9 +4,10 @@
 #include "Item.h"
 #include "Player.h"
 #include <assert.h>
+#include <iostream>
 
-Exit::Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination, const initializer_list<const Item*>& requiredItems) :
-	Entity("", description, EntityType::EXIT, origin), directionType(directionType), destination(destination), requiredItems(requiredItems)
+Exit::Exit(const char* name, const char* description, DirectionType directionType, Room* origin, const Room* destination, const initializer_list<const Item*>& requiredItems) :
+	Entity(name, description, EntityType::EXIT, origin), directionType(directionType), destination(destination), requiredItems(requiredItems)
 {
 	assert(origin);
 	assert(destination);
@@ -41,4 +42,15 @@ void Exit::getMissingRequiredItems(const Player* player, list<const Item*>& miss
 
 	for(set<const Item*>::iterator it = requiredItems.begin(); it != requiredItems.end(); ++it)
 		if(!player->hasChild(*it, true)) missingItems.push_back(*it);
+}
+
+// --- Actions ---
+
+void Exit::look() const
+{
+	cout << getName() << endl;
+	cout << getOrigin()->getName() << " to " << destination->getName() << endl;
+	cout << getDescription() << endl;
+
+	cout << "REQUIRED_ITEMS" << endl; // description ¿?
 }

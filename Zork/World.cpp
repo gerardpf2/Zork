@@ -14,65 +14,56 @@ World::World()
 	Room* room2 = new Room("Room2", "Description Room2");
 	Room* room3 = new Room("Room3", "Description Room3");
 	Room* room4 = new Room("Room4", "Description Room4");
-	Room* room5 = new Room("Room5", "Description Room5");
-	Room* room6 = new Room("Room6", "Description Room6");
-	Room* room7 = new Room("Room7", "Description Room7");
 
 	Item* boat = new Item("Boat", "Description Boat", room0);
-	Item* sail = new Item("Sail", "Description Sail", room1, boat);
+	Item* sword = new Item("Sword", "Description Sword", room1);
+	Item* shield = new Item("Shield", "Description Shield", room2);
 	Item* oar = new Item("Oar", "Description Oar", room2, boat);
-	Item* shell = new Item("Shell", "Description Shell", room3);
-	Item* sword = new Item("Sword", "Description Sword", room4);
-	Item* shield = new Item("Shield", "Description Shield", room5);
-	Item* treasure = new Item("Treasure", "Description Treasure", room7);
+	Item* sail = new Item("Sail", "Description Sail", room3, boat);
+	Item* shell = new Item("Shell", "Description Shell", room4);
 
-	Exit* exit01 = new Exit(DirectionType::NORTH, "Description Exit01", room0, room1, { boat });
-	Exit* exit02 = new Exit(DirectionType::SOUTH, "Description Exit02", room0, room2, { boat });
-	Exit* exit13 = new Exit(DirectionType::SOUTHEAST, "Description Exit13", room1, room3, { boat });
-	Exit* exit31 = new Exit(DirectionType::NORTHWEST, "Description Exit31", room3, room1, { boat });
-	Exit* exit23 = new Exit(DirectionType::NORTHEAST, "Description Exit23", room2, room3, { boat });
-	Exit* exit32 = new Exit(DirectionType::SOUTHWEST, "Description Exit32", room3, room2, { boat });
-	Exit* exit34 = new Exit(DirectionType::NORTH, "Description Exit34", room3, room4, { boat, sail, oar });
-	Exit* exit35 = new Exit(DirectionType::SOUTH, "Description Exit35", room3, room5, { boat, sail, oar });
-	Exit* exit46 = new Exit(DirectionType::SOUTHEAST, "Description Exit46", room4, room6, { boat });
-	Exit* exit56 = new Exit(DirectionType::NORTHEAST, "Description Exit56", room5, room6, { boat });
-	Exit* exit67 = new Exit(DirectionType::EAST, "Description Exit67", room6, room7, { boat });
+	Item* no0 = new Item("No0", "Description No0", room0);
+	entities.push_back(no0);
+
+	Exit* exit01 = new Exit("NorthRoom0", "Description Exit01", DirectionType::NORTH, room0, room1, { boat });
+	Exit* exit10 = new Exit("SouthRoom1", "Description Exit10", DirectionType::SOUTH, room1, room0, { boat });
+	Exit* exit02 = new Exit("SouthRoom0", "Description Exit02", DirectionType::SOUTH, room0, room2, { boat });
+	Exit* exit20 = new Exit("NorthRoom2", "Description Exit20", DirectionType::NORTH, room2, room0, { boat });
+	Exit* exit13 = new Exit("SoutheastRoom1", "Description Exit13", DirectionType::SOUTHEAST, room1, room3, { boat });
+	Exit* exit31 = new Exit("NorthwestRoom3", "Description Exit31", DirectionType::NORTHWEST, room3, room1, { boat });
+	Exit* exit23 = new Exit("NortheastRoom2", "Description Exit23", DirectionType::NORTHEAST, room2, room3, { boat });
+	Exit* exit32 = new Exit("SouthwestRoom3", "Description Exit32", DirectionType::SOUTHWEST, room3, room2, { boat });
+	Exit* exit34 = new Exit("EastRoom3", "Description Exit34", DirectionType::EAST, room3, room4, { boat, sail, oar });
 
 	player = new Player("Player", "Description Player", room0);
 
-	entities.reserve(27);
+	entities.reserve(21);
 
-	// Rooms 8
+	// Rooms 5
 	entities.push_back(room0);
 	entities.push_back(room1);
 	entities.push_back(room2);
 	entities.push_back(room3);
 	entities.push_back(room4);
-	entities.push_back(room5);
-	entities.push_back(room6);
-	entities.push_back(room7);
 
-	// Items 7
+	// Items 6
 	entities.push_back(boat);
-	entities.push_back(sail);
-	entities.push_back(oar);
-	entities.push_back(shell);
 	entities.push_back(sword);
 	entities.push_back(shield);
-	entities.push_back(treasure);
+	entities.push_back(oar);
+	entities.push_back(sail);
+	entities.push_back(shell);
 
-	// Exits 11
+	// Exits 9
 	entities.push_back(exit01);
+	entities.push_back(exit10);
 	entities.push_back(exit02);
+	entities.push_back(exit20);
 	entities.push_back(exit13);
 	entities.push_back(exit31);
 	entities.push_back(exit23);
 	entities.push_back(exit32);
 	entities.push_back(exit34);
-	entities.push_back(exit35);
-	entities.push_back(exit46);
-	entities.push_back(exit56);
-	entities.push_back(exit67);
 
 	// Creatures 1
 	entities.push_back(player);

@@ -15,7 +15,7 @@ class Creature : public Entity
 
 		// --- Actions ---
 
-		virtual bool look(const vector<string>& tokens) const override;
+		virtual void look() const override;
 
 	protected:
 

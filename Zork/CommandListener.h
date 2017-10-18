@@ -33,6 +33,8 @@ class CommandListener
 
 		void printNextHistoryItem();
 
+		void printHelp() const;
+
 	private:
 
 		const Player* player = nullptr;

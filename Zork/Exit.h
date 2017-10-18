@@ -24,7 +24,7 @@ class Exit : public Entity
 {
 	public:
 
-		Exit(DirectionType directionType, const char* description, Room* origin, const Room* destination, const initializer_list<const Item*>& requiredItems = { });
+		Exit(const char* name, const char* description, DirectionType directionType, Room* origin, const Room* destination, const initializer_list<const Item*>& requiredItems = { });
 
 		virtual ~Exit();
 
@@ -35,6 +35,10 @@ class Exit : public Entity
 		DirectionType getDirectionType() const;
 
 		void getMissingRequiredItems(const Player* player, list<const Item*>& missingItems) const;
+
+		// --- Actions ---
+
+		virtual void look() const override;
 
 	private:
 

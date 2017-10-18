@@ -2,6 +2,7 @@
 
 #include "Room.h"
 #include <assert.h>
+#include <iostream>
 
 Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room) :
 	Entity(name, description, entityType, room)
@@ -21,11 +22,7 @@ const Room* Creature::getRoom() const
 
 // --- Actions ---
 
-#include <iostream>
-
-bool Creature::look(const vector<string>& tokens) const
+void Creature::look() const
 {
-	cout << "Creature::look" << endl;
-
-	return true;
+	// Check alive
 }

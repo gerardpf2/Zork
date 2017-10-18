@@ -34,6 +34,8 @@ class Entity
 
 		bool hasChild(const Entity* child, bool recursive = false) const;
 
+		Entity* getChild(const char* name, bool recursive = false) const;
+
 		Entity* getChild(EntityType entityType, const char* name, bool recursive = false) const;
 
 		const list<Entity*>* getAllChildren(EntityType entityType) const;
@@ -42,7 +44,7 @@ class Entity
 
 		// --- Actions ---
 
-		virtual bool look(const vector<string>& tokens) const;
+		virtual void look() const;
 
 	protected:
 

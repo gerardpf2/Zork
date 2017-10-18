@@ -13,6 +13,10 @@ class Item : public Entity
 
 		Item* getRequiredParentWhenEquipping() const;
 
+		// --- Actions ---
+
+		virtual void look() const override;
+
 	private:
 
 		Item* requiredParentWhenEquipping;

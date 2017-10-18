@@ -43,7 +43,7 @@ void CommandListener::listen(bool& stop)
 		else if(playerInput != "")
 		{
 			cout << endl;
-			if(!process(playerInput, stop)) cout << ". . ." << endl;
+			if(!process(playerInput, stop)) cout << "I don't understand your command." << endl;
 			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
 			currentHistoryItem = history.end();
 			playerInput = "";
@@ -72,12 +72,34 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 	assert(player);
 	assert(!tokens.empty());
 
+	bool commandOk = true;
+
 	string action = tokens[0];
+	unsigned int parametersCount = tokens.size() - 1;
 
-	if(action == "quit" || action == "q") stop = true;
-	else if(action == "look" || action == "l") return player->look(tokens);
+	switch(parametersCount)
+	{
+		case 0:
+			if(action == "quit" || action == "q") stop = true;
+			else if(action == "help" || action == "h") printHelp();
+			else if(action == "look" || action == "l") player->look();
+			else if(action == "inventory" || action == "i") player->inventory();
+			else commandOk = false;
 
-	return false;
+			break;
+		case 1:
+			if(action == "look" || action == "l") player->look(tokens);
+			else if(action == "go" || action == "g") player->go(tokens);
+			else if(action == "take" || action == "t") player->take(tokens);
+			else if(action == "drop" || action == "d") player->drop(tokens);
+			else commandOk = false;
+
+			break;
+		default:
+			commandOk = false;
+	}
+
+	return commandOk;
 }
 
 void CommandListener::removeCharacters(unsigned int amount)
@@ -111,4 +133,16 @@ void CommandListener::printNextHistoryItem()
 
 		cout << (playerInput = *currentHistoryItem);
 	}
+}
+
+void CommandListener::printHelp() const
+{
+	cout << "Commands" << endl;
+	cout << "   quit, q" << endl;
+	cout << "   help, h" << endl;
+	cout << "   inventory, i" << endl;
+	cout << "   look, l [me, _entity_]" << endl;
+	cout << "   go, g _direction_" << endl;
+	cout << "   take, t _item_" << endl;
+	cout << "   drop, d _item_" << endl;
 }

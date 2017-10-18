@@ -13,7 +13,17 @@ class Player : public Creature
 
 		// --- Actions ---
 
-		bool look(const vector<string>& tokens) const override;
+		void look() const override;
+
+		void look(const vector<string>& tokens) const;
+
+		void inventory() const;
+
+		void go(const vector<string>& tokens) const;
+
+		void take(const vector<string>& tokens) const;
+
+		void drop(const vector<string>& tokens) const;
 };
 
 #endif
