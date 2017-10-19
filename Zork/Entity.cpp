@@ -127,6 +127,22 @@ void Entity::removeChild(Entity* child)
 void Entity::update(clock_t msDeltaTime)
 { }
 
+void Entity::printChildren(const char* type, EntityType entityType, const char* onEmpty) const
+{
+	assert(type);
+	
+	const list<Entity*>* children = getAllChildren(entityType);
+
+	if(!children->empty())
+	{
+		cout << type << endl;
+
+		for(list<Entity*>::const_iterator it = children->begin(); it != children->end(); ++it)
+			cout << "\t" << (*it)->getName() << endl;
+	}
+	else if(onEmpty) cout << onEmpty << endl;
+}
+
 // --- Actions ---
 
 void Entity::look() const

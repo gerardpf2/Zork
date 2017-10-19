@@ -43,7 +43,8 @@ void CommandListener::listen(bool& stop)
 		else if(playerInput != "")
 		{
 			cout << endl;
-			if(!process(playerInput, stop)) cout << "I don't understand your command." << endl;
+			if(!process(playerInput, stop)) cout << "I do not understand your command." << endl;
+			cout << "------------------------------" << endl;
 			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
 			currentHistoryItem = history.end();
 			playerInput = "";
@@ -138,11 +139,11 @@ void CommandListener::printNextHistoryItem()
 void CommandListener::printHelp() const
 {
 	cout << "Commands" << endl;
-	cout << "   quit, q" << endl;
-	cout << "   help, h" << endl;
-	cout << "   inventory, i" << endl;
-	cout << "   look, l [me, _entity_]" << endl;
-	cout << "   go, g _direction_" << endl;
-	cout << "   take, t _item_" << endl;
-	cout << "   drop, d _item_" << endl;
+	cout << "\tquit, q" << endl;
+	cout << "\thelp, h" << endl;
+	cout << "\tinventory, i" << endl;
+	cout << "\tlook, l [me, _entity_]" << endl;
+	cout << "\tgo, g _direction_" << endl;
+	cout << "\ttake, t _item_" << endl;
+	cout << "\tdrop, d _item_" << endl;
 }

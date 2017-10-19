@@ -21,13 +21,5 @@ void Item::look() const
 	cout << getName() << endl;
 	cout << getDescription() << endl;
 
-	const list<Entity*>* children = getAllChildren(EntityType::ITEM);
-
-	if(!children->empty())
-	{
-		cout << "It contains" << endl;
-
-		for(list<Entity*>::const_iterator it = children->begin(); it != children->end(); ++it)
-			cout << "   " << (*it)->getName() << endl;
-	}
+	printChildren("This contains:", EntityType::ITEM);
 }

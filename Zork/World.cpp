@@ -16,14 +16,18 @@ World::World()
 	Room* room4 = new Room("Room4", "Description Room4");
 
 	Item* boat = new Item("Boat", "Description Boat", room0);
+	Item* sword = new Item("Sword", "Description Sword", room0);
+	Item* shield = new Item("Shield", "Description Shield", room0);
+	Item* oar = new Item("Oar", "Description Oar", room0, boat);
+	Item* sail = new Item("Sail", "Description Sail", room0, boat);
+	Item* shell = new Item("Shell", "Description Shell", room0);
+
+	/* Item* boat = new Item("Boat", "Description Boat", room0);
 	Item* sword = new Item("Sword", "Description Sword", room1);
 	Item* shield = new Item("Shield", "Description Shield", room2);
 	Item* oar = new Item("Oar", "Description Oar", room2, boat);
 	Item* sail = new Item("Sail", "Description Sail", room3, boat);
-	Item* shell = new Item("Shell", "Description Shell", room4);
-
-	Item* no0 = new Item("No0", "Description No0", room0);
-	entities.push_back(no0);
+	Item* shell = new Item("Shell", "Description Shell", room4); */
 
 	Exit* exit01 = new Exit("NorthRoom0", "Description Exit01", DirectionType::NORTH, room0, room1, { boat });
 	Exit* exit10 = new Exit("SouthRoom1", "Description Exit10", DirectionType::SOUTH, room1, room0, { boat });

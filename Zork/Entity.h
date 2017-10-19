@@ -50,6 +50,8 @@ class Entity
 
 		Entity(const char* name, const char* description, EntityType entityType, Entity* parent);
 
+		void printChildren(const char* type, EntityType entityType, const char* onEmpty = nullptr) const;
+
 	private:
 
 		void addChild(Entity* child);

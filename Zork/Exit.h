@@ -36,10 +36,6 @@ class Exit : public Entity
 
 		void getMissingRequiredItems(const Player* player, list<const Item*>& missingItems) const;
 
-		// --- Actions ---
-
-		virtual void look() const override;
-
 	private:
 
 		DirectionType directionType;

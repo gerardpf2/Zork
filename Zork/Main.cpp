@@ -8,12 +8,16 @@ int main()
 	
 	bool stop = false;
 
-	commandListener.process("help", stop);
-	commandListener.process("look", stop);
+	// commandListener.helloMessage();
+
+	// commandListener.process("help", stop);
+	// commandListener.process("look", stop);
 
 	while(!stop)
 	{
 		commandListener.listen(stop);
 		world.update();
 	}
+
+	// commandListener.goodbyeMessage();
 }
