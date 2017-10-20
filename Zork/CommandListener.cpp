@@ -6,7 +6,7 @@
 #include <assert.h>
 #include "Player.h"
 
-CommandListener::CommandListener(const Player* player) :
+CommandListener::CommandListener(Player* player) :
 	player(player)
 {
 	assert(player);
@@ -42,7 +42,7 @@ void CommandListener::listen(bool& stop)
 		}
 		else if(playerInput != "")
 		{
-			cout << endl;
+			cout << endl << endl;
 			if(!process(playerInput, stop)) cout << "I do not understand your command." << endl;
 			cout << "------------------------------" << endl;
 			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
@@ -50,6 +50,19 @@ void CommandListener::listen(bool& stop)
 			playerInput = "";
 		}
 	}
+}
+
+void CommandListener::printHelloMessage() const
+{
+	cout << "Welcome!" << endl;
+	cout << "Type 'commands' or 'c' in order to see all existing commands." << endl;
+	cout << "------------------------------" << endl;
+}
+
+void CommandListener::printGoodbyeMessage() const
+{
+	cout << "Goodbye!" << endl;
+	cout << "------------------------------" << endl;
 }
 
 bool CommandListener::process(const string& command, bool& stop) const
@@ -82,8 +95,8 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 	{
 		case 0:
 			if(action == "quit" || action == "q") stop = true;
-			else if(action == "help" || action == "h") printHelp();
 			else if(action == "look" || action == "l") player->look();
+			else if (action == "commands" || action == "c") printCommands();
 			else if(action == "inventory" || action == "i") player->inventory();
 			else commandOk = false;
 
@@ -93,6 +106,11 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 			else if(action == "go" || action == "g") player->go(tokens);
 			else if(action == "take" || action == "t") player->take(tokens);
 			else if(action == "drop" || action == "d") player->drop(tokens);
+			else commandOk = false;
+
+			break;
+		case 2:
+			if(action == "place" || action == "p") player->place(tokens);
 			else commandOk = false;
 
 			break;
@@ -136,14 +154,15 @@ void CommandListener::printNextHistoryItem()
 	}
 }
 
-void CommandListener::printHelp() const
+void CommandListener::printCommands() const
 {
-	cout << "Commands" << endl;
-	cout << "\tquit, q" << endl;
-	cout << "\thelp, h" << endl;
-	cout << "\tinventory, i" << endl;
-	cout << "\tlook, l [me, _entity_]" << endl;
-	cout << "\tgo, g _direction_" << endl;
-	cout << "\ttake, t _item_" << endl;
-	cout << "\tdrop, d _item_" << endl;
+	cout << "quit, q" << endl;
+	cout << "help, h" << endl;
+	cout << "inventory, i" << endl;
+	cout << "look, l [me, _item_ || _enemy_]" << endl;
+	cout << "go, g _direction_" << endl;
+	cout << "take, t _item_" << endl;
+	cout << "drop, d _item_" << endl;
+	cout << "examine, e _enemy_" << endl;
+	cout << "place, p _item_ _item_" << endl;
 }

@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+#include "Enemy.h"
 #include <assert.h>
 #include <iostream>
 
@@ -49,6 +50,14 @@ void Entity::assignNewParent(Entity* newParent)
 	parent = newParent;
 
 	if(parent) parent->addChild(this);
+}
+
+bool Entity::hasChildren() const
+{
+	for(unsigned int i = 0; i < children.size(); ++i)
+		if(!children[i].empty()) return true;
+
+	return false;
 }
 
 bool Entity::hasChild(const Entity* child, bool recursive) const
@@ -108,6 +117,18 @@ const list<Entity*>* Entity::getAllChildren(EntityType entityType) const
 	return &children[(unsigned int)entityType];
 }
 
+bool Entity::hasAliveEnemyParent(bool recursive) const
+{
+	if(parent)
+	{
+		if(parent->entityType == EntityType::ENEMY)
+			return ((Enemy*)parent)->isAlive();
+		if(recursive) return parent->hasAliveEnemyParent(recursive);
+	}
+
+	return false;
+}
+
 void Entity::addChild(Entity* child)
 {
 	assert(child);
@@ -126,22 +147,6 @@ void Entity::removeChild(Entity* child)
 
 void Entity::update(clock_t msDeltaTime)
 { }
-
-void Entity::printChildren(const char* type, EntityType entityType, const char* onEmpty) const
-{
-	assert(type);
-	
-	const list<Entity*>* children = getAllChildren(entityType);
-
-	if(!children->empty())
-	{
-		cout << type << endl;
-
-		for(list<Entity*>::const_iterator it = children->begin(); it != children->end(); ++it)
-			cout << "\t" << (*it)->getName() << endl;
-	}
-	else if(onEmpty) cout << onEmpty << endl;
-}
 
 // --- Actions ---
 

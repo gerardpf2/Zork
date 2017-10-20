@@ -11,6 +11,10 @@ class Item : public Entity
 
 		virtual ~Item();
 
+		bool getCanBeEquipped() const;
+
+		void setCanBeEquipped(bool canBeEquipped);
+
 		Item* getRequiredParentWhenEquipping() const;
 
 		// --- Actions ---
@@ -18,6 +22,8 @@ class Item : public Entity
 		virtual void look() const override;
 
 	private:
+
+		bool canBeEquipped;
 
 		Item* requiredParentWhenEquipping;
 };

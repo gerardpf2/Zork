@@ -11,7 +11,9 @@ class Creature : public Entity
 
 		virtual ~Creature();
 
-		const Room* getRoom() const;
+		bool isAlive() const;
+
+		void takeDamage(unsigned int amount = 1);
 
 		// --- Actions ---
 
@@ -19,7 +21,12 @@ class Creature : public Entity
 
 	protected:
 
-		Creature(const char* name, const char* description, EntityType entityType, Room* room);
+		Creature(const char* name, const char* description, EntityType entityType, Room* room, int health);
+
+	private:
+
+		int health;
+		bool alive;
 };
 
 #endif

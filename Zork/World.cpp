@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Item.h"
 #include "Exit.h"
+#include "Enemy.h"
 #include "Player.h"
 
 World::World()
@@ -15,33 +16,36 @@ World::World()
 	Room* room3 = new Room("Room3", "Description Room3");
 	Room* room4 = new Room("Room4", "Description Room4");
 
+	enemy = new Enemy("Enemy", "Description Enemy", room0, 3);
+	player = new Player("Player", "Description Player", room0, 5);
+
 	Item* boat = new Item("Boat", "Description Boat", room0);
 	Item* sword = new Item("Sword", "Description Sword", room0);
 	Item* shield = new Item("Shield", "Description Shield", room0);
 	Item* oar = new Item("Oar", "Description Oar", room0, boat);
 	Item* sail = new Item("Sail", "Description Sail", room0, boat);
 	Item* shell = new Item("Shell", "Description Shell", room0);
+	Item* treasure = new Item("Treasure", "Description Treasure", enemy);
 
 	/* Item* boat = new Item("Boat", "Description Boat", room0);
 	Item* sword = new Item("Sword", "Description Sword", room1);
 	Item* shield = new Item("Shield", "Description Shield", room2);
 	Item* oar = new Item("Oar", "Description Oar", room2, boat);
 	Item* sail = new Item("Sail", "Description Sail", room3, boat);
-	Item* shell = new Item("Shell", "Description Shell", room4); */
+	Item* shell = new Item("Shell", "Description Shell", room4);
+	Item* treasure = new Item("Treasure", "Description Treasure", enemy); */
 
-	Exit* exit01 = new Exit("NorthRoom0", "Description Exit01", DirectionType::NORTH, room0, room1, { boat });
-	Exit* exit10 = new Exit("SouthRoom1", "Description Exit10", DirectionType::SOUTH, room1, room0, { boat });
-	Exit* exit02 = new Exit("SouthRoom0", "Description Exit02", DirectionType::SOUTH, room0, room2, { boat });
-	Exit* exit20 = new Exit("NorthRoom2", "Description Exit20", DirectionType::NORTH, room2, room0, { boat });
-	Exit* exit13 = new Exit("SoutheastRoom1", "Description Exit13", DirectionType::SOUTHEAST, room1, room3, { boat });
-	Exit* exit31 = new Exit("NorthwestRoom3", "Description Exit31", DirectionType::NORTHWEST, room3, room1, { boat });
-	Exit* exit23 = new Exit("NortheastRoom2", "Description Exit23", DirectionType::NORTHEAST, room2, room3, { boat });
-	Exit* exit32 = new Exit("SouthwestRoom3", "Description Exit32", DirectionType::SOUTHWEST, room3, room2, { boat });
-	Exit* exit34 = new Exit("EastRoom3", "Description Exit34", DirectionType::EAST, room3, room4, { boat, sail, oar });
+	Exit* exit01 = new Exit("Description Exit01", DirectionType::NORTH, room0, room1, { boat });
+	Exit* exit10 = new Exit("Description Exit10", DirectionType::SOUTH, room1, room0, { boat });
+	Exit* exit02 = new Exit("Description Exit02", DirectionType::SOUTH, room0, room2, { boat });
+	Exit* exit20 = new Exit("Description Exit20", DirectionType::NORTH, room2, room0, { boat });
+	Exit* exit13 = new Exit("Description Exit13", DirectionType::SOUTHEAST, room1, room3, { boat });
+	Exit* exit31 = new Exit("Description Exit31", DirectionType::NORTHWEST, room3, room1, { boat });
+	Exit* exit23 = new Exit("Description Exit23", DirectionType::NORTHEAST, room2, room3, { boat });
+	Exit* exit32 = new Exit("Description Exit32", DirectionType::SOUTHWEST, room3, room2, { boat });
+	Exit* exit34 = new Exit("Description Exit34", DirectionType::EAST, room3, room4, { boat, sail, oar });
 
-	player = new Player("Player", "Description Player", room0);
-
-	entities.reserve(21);
+	entities.reserve(23);
 
 	// Rooms 5
 	entities.push_back(room0);
@@ -50,13 +54,14 @@ World::World()
 	entities.push_back(room3);
 	entities.push_back(room4);
 
-	// Items 6
+	// Items 7
 	entities.push_back(boat);
 	entities.push_back(sword);
 	entities.push_back(shield);
 	entities.push_back(oar);
 	entities.push_back(sail);
 	entities.push_back(shell);
+	entities.push_back(treasure);
 
 	// Exits 9
 	entities.push_back(exit01);
@@ -69,7 +74,8 @@ World::World()
 	entities.push_back(exit32);
 	entities.push_back(exit34);
 
-	// Creatures 1
+	// Creatures 2
+	entities.push_back(enemy);
 	entities.push_back(player);
 }
 
@@ -84,7 +90,12 @@ World::~World()
 	entities.clear();
 }
 
-const Player* World::getPlayer() const
+Enemy* World::getEnemy() const
+{
+	return enemy;
+}
+
+Player* World::getPlayer() const
 {
 	return player;
 }

@@ -7,7 +7,7 @@ class Player : public Creature
 {
 	public:
 
-		Player(const char* name, const char* description, Room* room);
+		Player(const char* name, const char* description, Room* room, int health);
 		
 		virtual ~Player();
 
@@ -19,11 +19,13 @@ class Player : public Creature
 
 		void inventory() const;
 
-		void go(const vector<string>& tokens) const;
+		void go(const vector<string>& tokens);
 
 		void take(const vector<string>& tokens) const;
 
 		void drop(const vector<string>& tokens) const;
+
+		void place(const vector<string>& tokens) const;
 };
 
 #endif

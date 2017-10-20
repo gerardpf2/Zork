@@ -8,10 +8,7 @@ int main()
 	
 	bool stop = false;
 
-	// commandListener.helloMessage();
-
-	// commandListener.process("help", stop);
-	// commandListener.process("look", stop);
+	commandListener.printHelloMessage();
 
 	while(!stop)
 	{
@@ -19,5 +16,5 @@ int main()
 		world.update();
 	}
 
-	// commandListener.goodbyeMessage();
+	commandListener.printGoodbyeMessage();
 }

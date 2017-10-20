@@ -9,10 +9,10 @@ using namespace std;
 
 enum class EntityType
 {
-	NPC,
 	ITEM,
 	EXIT,
 	ROOM,
+	ENEMY,
 	PLAYER,
 };
 
@@ -32,6 +32,8 @@ class Entity
 
 		void assignNewParent(Entity* newParent);
 
+		bool hasChildren() const;
+
 		bool hasChild(const Entity* child, bool recursive = false) const;
 
 		Entity* getChild(const char* name, bool recursive = false) const;
@@ -39,6 +41,8 @@ class Entity
 		Entity* getChild(EntityType entityType, const char* name, bool recursive = false) const;
 
 		const list<Entity*>* getAllChildren(EntityType entityType) const;
+
+		bool hasAliveEnemyParent(bool recursive = false) const;
 
 		virtual void update(clock_t msDeltaTime);
 
@@ -49,8 +53,6 @@ class Entity
 	protected:
 
 		Entity(const char* name, const char* description, EntityType entityType, Entity* parent);
-
-		void printChildren(const char* type, EntityType entityType, const char* onEmpty = nullptr) const;
 
 	private:
 

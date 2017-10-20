@@ -6,6 +6,7 @@
 
 using namespace std;
 
+class Enemy;
 class Entity;
 class Player;
 
@@ -17,11 +18,15 @@ class World
 
 		~World();
 
-		const Player* getPlayer() const;
+		Enemy* getEnemy() const;
+
+		Player* getPlayer() const;
 
 		void update();
 
 	private:
+
+		Enemy* enemy = nullptr;
 
 		Player* player = nullptr;
 

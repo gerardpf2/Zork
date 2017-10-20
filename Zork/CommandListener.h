@@ -13,15 +13,19 @@ class CommandListener
 {
 	public:
 
-		CommandListener(const Player* player);
+		CommandListener(Player* player);
 
 		~CommandListener();
 
 		void listen(bool& stop);
 
-		bool process(const string& command, bool& stop) const;
+		void printHelloMessage() const;
+
+		void printGoodbyeMessage() const;
 
 	private:
+
+		bool process(const string& command, bool& stop) const;
 
 		void split(const string& command, vector<string>& tokens) const;
 
@@ -33,11 +37,11 @@ class CommandListener
 
 		void printNextHistoryItem();
 
-		void printHelp() const;
+		void printCommands() const;
 
 	private:
 
-		const Player* player = nullptr;
+		Player* player = nullptr;
 
 		string playerInput;
 
