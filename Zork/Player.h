@@ -3,13 +3,23 @@
 
 #include "Creature.h"
 
+class CombatSystem;
+
 class Player : public Creature
 {
 	public:
 
-		Player(const char* name, const char* description, Room* room, int health);
+		Player(const char* name, const char* description, Room* room, CombatSystem* combatSystem, int health);
 		
 		virtual ~Player();
+
+		unsigned int getScore() const;
+
+		unsigned int getMoves() const;
+
+		void incrementScore(unsigned int amount);
+
+		void incrementMoves(unsigned int amount = 1);
 
 		// --- Actions ---
 
@@ -21,11 +31,21 @@ class Player : public Creature
 
 		void go(const vector<string>& tokens);
 
-		void take(const vector<string>& tokens) const;
+		void take(const vector<string>& tokens);
 
 		void drop(const vector<string>& tokens) const;
 
 		void place(const vector<string>& tokens) const;
+
+		void attack(const vector<string>& tokens);
+
+	private:
+
+		unsigned int score;
+
+		unsigned int moves;
+
+		CombatSystem* combatSystem = nullptr;
 };
 
 #endif

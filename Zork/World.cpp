@@ -5,6 +5,7 @@
 #include "Exit.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "CombatSystem.h"
 
 World::World()
 {
@@ -16,16 +17,19 @@ World::World()
 	Room* room3 = new Room("Room3", "Description Room3");
 	Room* room4 = new Room("Room4", "Description Room4");
 
-	enemy = new Enemy("Enemy", "Description Enemy", room0, 3);
-	player = new Player("Player", "Description Player", room0, 5);
+	combatSystem = new CombatSystem(/* player, enemy, */ 3, 3, 2, 1, CombatDirectionType::UP, 0, 1, CombatDirectionType::DOWN);
 
-	Item* boat = new Item("Boat", "Description Boat", room0);
-	Item* sword = new Item("Sword", "Description Sword", room0);
-	Item* shield = new Item("Shield", "Description Shield", room0);
-	Item* oar = new Item("Oar", "Description Oar", room0, boat);
-	Item* sail = new Item("Sail", "Description Sail", room0, boat);
-	Item* shell = new Item("Shell", "Description Shell", room0);
-	Item* treasure = new Item("Treasure", "Description Treasure", enemy);
+	enemy = new Enemy("Enemy", "Description Enemy", room0, combatSystem, 3);
+	player = new Player("Player", "Description Player", room0, combatSystem, 5);
+
+	Item* boat = new Item("Boat", "Description Boat", room0, 5, false, 0, 2);
+	Item* sword = new Item("Sword", "Description Sword", player, 5, true, 1, 1);
+	// Item* sword = new Item("Sword", "Description Sword", room0, 5, true, 1, 1);
+	Item* shield = new Item("Shield", "Description Shield", room0, 5, false, 0, 1);
+	Item* oar = new Item("Oar", "Description Oar", room0, 10, false, 0, 1, boat);
+	Item* sail = new Item("Sail", "Description Sail", room0, 10, false, 0, 1, boat);
+	Item* shell = new Item("Shell", "Description Shell", room0, 1, false, 0, 1);
+	Item* treasure = new Item("Treasure", "Description Treasure", enemy, 100, false, 0, 1);
 
 	/* Item* boat = new Item("Boat", "Description Boat", room0);
 	Item* sword = new Item("Sword", "Description Sword", room1);
@@ -77,6 +81,8 @@ World::World()
 	// Creatures 2
 	entities.push_back(enemy);
 	entities.push_back(player);
+
+	if(enemy->isAlive()) enemy->lockItems(true);
 }
 
 World::~World()
@@ -88,6 +94,9 @@ World::~World()
 	}
 
 	entities.clear();
+
+	delete combatSystem;
+	combatSystem = nullptr;
 }
 
 Enemy* World::getEnemy() const
@@ -100,6 +109,11 @@ Player* World::getPlayer() const
 	return player;
 }
 
+CombatSystem* World::getCombatSystem() const
+{
+	return combatSystem;
+}
+
 void World::update()
 {
 	clock_t currentUpdateTime = clock();
@@ -107,6 +121,8 @@ void World::update()
 
 	for(unsigned int i = 0; i < entities.size(); ++i)
 		entities[i]->update(msDeltaTime);
+
+	combatSystem->update(msDeltaTime); // ¿?
 
 	lastUpdateTime = currentUpdateTime;
 }

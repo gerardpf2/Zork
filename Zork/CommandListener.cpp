@@ -44,7 +44,8 @@ void CommandListener::listen(bool& stop)
 		{
 			cout << endl << endl;
 			if(!process(playerInput, stop)) cout << "I do not understand your command." << endl;
-			cout << "------------------------------" << endl;
+			player->incrementMoves();
+			printCommandEnding();
 			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
 			currentHistoryItem = history.end();
 			playerInput = "";
@@ -56,13 +57,30 @@ void CommandListener::printHelloMessage() const
 {
 	cout << "Welcome!" << endl;
 	cout << "Type 'commands' or 'c' in order to see all existing commands." << endl;
-	cout << "------------------------------" << endl;
+	printCommandEnding();
 }
 
 void CommandListener::printGoodbyeMessage() const
 {
 	cout << "Goodbye!" << endl;
-	cout << "------------------------------" << endl;
+	printCommandEnding();
+}
+
+void CommandListener::printDynamic(const string& text)
+{
+	if(!playerInput.empty())
+	{
+		string tmpPlayerInput = playerInput;
+
+		removeCharacters(playerInput.size());
+
+		cout << text << endl;
+
+		playerInput = tmpPlayerInput;
+
+		cout << playerInput;
+	}
+	else cout << text << endl;
 }
 
 bool CommandListener::process(const string& command, bool& stop) const
@@ -111,6 +129,7 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 			break;
 		case 2:
 			if(action == "place" || action == "p") player->place(tokens);
+			else if(action == "attack" || action == "a") player->attack(tokens);
 			else commandOk = false;
 
 			break;
@@ -119,15 +138,6 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 	}
 
 	return commandOk;
-}
-
-void CommandListener::removeCharacters(unsigned int amount)
-{
-	while(!playerInput.empty() && amount-- > 0)
-	{
-		cout << "\b \b";
-		playerInput.pop_back();
-	}
 }
 
 void CommandListener::printPreviousHistoryItem()
@@ -163,6 +173,22 @@ void CommandListener::printCommands() const
 	cout << "go, g _direction_" << endl;
 	cout << "take, t _item_" << endl;
 	cout << "drop, d _item_" << endl;
-	cout << "examine, e _enemy_" << endl;
 	cout << "place, p _item_ _item_" << endl;
+	cout << "attack, a _item_ _enemy_" << endl;
+}
+
+void CommandListener::printCommandEnding() const
+{
+	assert(player);
+
+	cout << "------------------------------ Score: " << player->getScore() << ", Moves: " << player->getMoves() << endl;
+}
+
+void CommandListener::removeCharacters(unsigned int amount)
+{
+	while(!playerInput.empty() && amount-- > 0)
+	{
+		cout << "\b \b";
+		playerInput.pop_back();
+	}
 }

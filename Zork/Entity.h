@@ -42,7 +42,9 @@ class Entity
 
 		const list<Entity*>* getAllChildren(EntityType entityType) const;
 
-		bool hasAliveEnemyParent(bool recursive = false) const;
+		void lockItems(bool recursive = false) const;
+
+		void unlockItems(bool recursive = false) const;
 
 		virtual void update(clock_t msDeltaTime);
 

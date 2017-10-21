@@ -23,6 +23,8 @@ class CommandListener
 
 		void printGoodbyeMessage() const;
 
+		void printDynamic(const string& text);
+
 	private:
 
 		bool process(const string& command, bool& stop) const;
@@ -31,13 +33,15 @@ class CommandListener
 
 		bool resolve(const vector<string>& tokens, bool& stop) const;
 
-		void removeCharacters(unsigned int amount);
-
 		void printPreviousHistoryItem();
 
 		void printNextHistoryItem();
 
 		void printCommands() const;
+
+		void printCommandEnding() const;
+
+		void removeCharacters(unsigned int amount);
 
 	private:
 

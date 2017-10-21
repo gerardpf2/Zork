@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CombatSystem.cpp" />
     <ClCompile Include="CommandListener.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="CommandListener.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Entity.h" />

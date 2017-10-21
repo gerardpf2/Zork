@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-#include "Enemy.h"
+#include "Item.h"
 #include <assert.h>
 #include <iostream>
 
@@ -117,16 +117,34 @@ const list<Entity*>* Entity::getAllChildren(EntityType entityType) const
 	return &children[(unsigned int)entityType];
 }
 
-bool Entity::hasAliveEnemyParent(bool recursive) const
+void Entity::lockItems(bool recursive) const
 {
-	if(parent)
-	{
-		if(parent->entityType == EntityType::ENEMY)
-			return ((Enemy*)parent)->isAlive();
-		if(recursive) return parent->hasAliveEnemyParent(recursive);
-	}
+	const list<Entity*>* items = getAllChildren(EntityType::ITEM);
 
-	return false;
+	for(list<Entity*>::const_iterator it = items->begin(); it != items->end(); ++it)
+		((Item*)*it)->setCanBeEquipped(false);
+
+	if(recursive)
+	{
+		for(unsigned int i = 0; i < children.size(); ++i)
+			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
+				(*it)->lockItems(recursive);
+	}
+}
+
+void Entity::unlockItems(bool recursive) const
+{
+	const list<Entity*>* items = getAllChildren(EntityType::ITEM);
+
+	for(list<Entity*>::const_iterator it = items->begin(); it != items->end(); ++it)
+		((Item*)*it)->setCanBeEquipped(true);
+
+	if(recursive)
+	{
+		for(unsigned int i = 0; i < children.size(); ++i)
+			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
+				(*it)->unlockItems(recursive);
+	}
 }
 
 void Entity::addChild(Entity* child)

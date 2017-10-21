@@ -9,6 +9,7 @@ using namespace std;
 class Enemy;
 class Entity;
 class Player;
+class CombatSystem;
 
 class World
 {
@@ -22,6 +23,8 @@ class World
 
 		Player* getPlayer() const;
 
+		CombatSystem* getCombatSystem() const;
+
 		void update();
 
 	private:
@@ -29,6 +32,8 @@ class World
 		Enemy* enemy = nullptr;
 
 		Player* player = nullptr;
+
+		CombatSystem* combatSystem = nullptr;
 
 		vector<Entity*> entities;
 

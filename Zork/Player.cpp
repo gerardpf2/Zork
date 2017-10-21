@@ -3,15 +3,39 @@
 #include "Item.h"
 #include "Exit.h"
 #include <string>
+#include "Enemy.h"
 #include <assert.h>
 #include <iostream>
+#include "CombatSystem.h"
 
-Player::Player(const char* name, const char* description, Room* room, int health) :
-	Creature(name, description, EntityType::PLAYER, room, health)
-{ }
+Player::Player(const char* name, const char* description, Room* room, CombatSystem* combatSystem, int health) :
+	Creature(name, description, EntityType::PLAYER, room, health, 1500), score(0), moves(0), combatSystem(combatSystem)
+{
+	assert(combatSystem);
+}
 
 Player::~Player()
 { }
+
+unsigned int Player::getScore() const
+{
+	return score;
+}
+
+unsigned int Player::getMoves() const
+{
+	return moves;
+}
+
+void Player::incrementScore(unsigned int amount)
+{
+	score += amount;
+}
+
+void Player::incrementMoves(unsigned int amount)
+{
+	moves += amount;
+}
 
 // --- Actions ---
 
@@ -76,6 +100,12 @@ void Player::go(const vector<string>& tokens)
 
 	assert(tokens.size() == 2);
 
+	if(getInCombat())
+	{
+		cout << "You can not go anywhere if you are in a battle." << endl;
+		return;
+	}
+
 	string name = tokens[1];
 	DirectionType directionType;
 
@@ -126,7 +156,7 @@ void Player::go(const vector<string>& tokens)
 	cout << "Exit at " << name << " does not exist." << endl;
 }
 
-void Player::take(const vector<string>& tokens) const
+void Player::take(const vector<string>& tokens)
 {
 	// 1 parameter (_item_)
 
@@ -151,14 +181,16 @@ void Player::take(const vector<string>& tokens) const
 				{
 					if(hasChild(requiredItemParent, true))
 					{
-						entity->assignNewParent(requiredItemParent);
+						item->assignNewParent(requiredItemParent);
+						incrementScore(item->getScoreWhenEquipped());
 						cout << "You take " << name << ". It is added to " << requiredItemParent->getName() << "." << endl;
 					}
 					else cout << "You need " << requiredItemParent->getName() << " in order to take " << name << "." << endl;
 				}
 				else
 				{
-					entity->assignNewParent((Entity*)this);
+					item->assignNewParent((Entity*)this);
+					incrementScore(item->getScoreWhenEquipped());
 					cout << "You take " << name << "." << endl;
 				}
 			}
@@ -228,4 +260,42 @@ void Player::place(const vector<string>& tokens) const
 		else cout << "Both items are the same." << endl;
 	}
 	else cout << name << " is not in your inventory." << endl;
+}
+
+void Player::attack(const vector<string>& tokens)
+{
+	// 2 parameters (_item_, _enemy_)
+
+	assert(tokens.size() == 3);
+
+	string itemName = tokens[1];
+	Entity* entityItem = getChild(EntityType::ITEM, itemName.c_str(), true);
+
+	if(entityItem)
+	{
+		string enemyName = tokens[2];
+		Entity* entityEnemy = getParent()->getChild(EntityType::ENEMY, enemyName.c_str(), true);
+
+		if(entityEnemy)
+		{
+			Item* item = (Item*)entityItem;
+
+			if(item->getCanBeUsedToAttack())
+			{
+				if(canDoAction())
+				{
+					Enemy* enemy = (Enemy*)entityEnemy;
+
+					doAction();
+					setInCombat(true);
+					enemy->setInCombat(true);
+					enemy->takeDamage(item->getAttackDamage());
+				}
+				else cout << "You are tired." << endl;
+			}
+			else cout << itemName << " can not be used to attack." << endl;
+		}
+		else cout << enemyName << " is not here." << endl;
+	}
+	else cout << itemName << " is not in your inventory." << endl;
 }

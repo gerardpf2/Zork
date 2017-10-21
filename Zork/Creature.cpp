@@ -4,12 +4,12 @@
 #include <assert.h>
 #include <iostream>
 
-Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room, int health) :
-	Entity(name, description, entityType, room), health(health)
+Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction) :
+	Entity(name, description, entityType, room), health(health), msNextAction(msNextAction)
 {
 	assert(room);
 
-	alive = health > 0;
+	if(!(alive = health > 0)) die();
 }
 
 Creature::~Creature()
@@ -22,8 +22,47 @@ bool Creature::isAlive() const
 
 void Creature::takeDamage(unsigned int amount)
 {
-	alive = (health -= amount) > 0;
+	if(alive && (health -= amount) <= 0)
+	{
+		die();
+		alive = false;
+	}
 }
+
+bool Creature::getInCombat() const
+{
+	return inCombat;
+}
+
+void Creature::setInCombat(bool inCombat)
+{
+	this->inCombat = inCombat;
+}
+
+bool Creature::canDoAction() const
+{
+	return currentMsNextAction <= 0;
+}
+
+void Creature::doAction()
+{
+	currentMsNextAction = msNextAction;
+}
+
+void Creature::update(clock_t msDeltaTime)
+{
+	if(inCombat)
+	{
+		if(alive)
+		{
+			if(currentMsNextAction > 0) currentMsNextAction -= msDeltaTime;
+		}
+		else inCombat = false;
+	}
+}
+
+void Creature::die()
+{ }
 
 // --- Actions ---
 
