@@ -117,33 +117,18 @@ const list<Entity*>* Entity::getAllChildren(EntityType entityType) const
 	return &children[(unsigned int)entityType];
 }
 
-void Entity::lockItems(bool recursive) const
+void Entity::lockItems(bool lock, bool recursive) const
 {
 	const list<Entity*>* items = getAllChildren(EntityType::ITEM);
 
 	for(list<Entity*>::const_iterator it = items->begin(); it != items->end(); ++it)
-		((Item*)*it)->setCanBeEquipped(false);
+		((Item*)*it)->setCanBeEquipped(!lock);
 
 	if(recursive)
 	{
 		for(unsigned int i = 0; i < children.size(); ++i)
 			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
-				(*it)->lockItems(recursive);
-	}
-}
-
-void Entity::unlockItems(bool recursive) const
-{
-	const list<Entity*>* items = getAllChildren(EntityType::ITEM);
-
-	for(list<Entity*>::const_iterator it = items->begin(); it != items->end(); ++it)
-		((Item*)*it)->setCanBeEquipped(true);
-
-	if(recursive)
-	{
-		for(unsigned int i = 0; i < children.size(); ++i)
-			for(list<Entity*>::const_iterator it = children[i].begin(); it != children[i].end(); ++it)
-				(*it)->unlockItems(recursive);
+				(*it)->lockItems(lock, recursive);
 	}
 }
 

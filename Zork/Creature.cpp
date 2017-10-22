@@ -4,8 +4,8 @@
 #include <assert.h>
 #include <iostream>
 
-Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction) :
-	Entity(name, description, entityType, room), health(health), msNextAction(msNextAction)
+Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction, int currentMsNextAction) :
+	Entity(name, description, entityType, room), health(health), msNextAction(msNextAction), currentMsNextAction(currentMsNextAction)
 {
 	assert(room);
 
@@ -18,6 +18,11 @@ Creature::~Creature()
 bool Creature::isAlive() const
 {
 	return alive;
+}
+
+int Creature::getHealth() const
+{
+	return health;
 }
 
 void Creature::takeDamage(unsigned int amount)

@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <iostream>
 
-Item::Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, bool canBeUsedToAttack, unsigned int attackDamage, unsigned int throwDamage, Item* requiredParentWhenEquipping) :
-	Entity(name, description, EntityType::ITEM, parent), canBeEquipped(true), scoreWhenEquipped(scoreWhenEquipped), canBeUsedToAttack(canBeUsedToAttack), attackDamage(attackDamage), throwDamage(throwDamage), requiredParentWhenEquipping(requiredParentWhenEquipping)
+Item::Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, bool canBeUsedToAttack, unsigned int attackDamage, unsigned int projectileDamage, Item* requiredParentWhenEquipping) :
+	Entity(name, description, EntityType::ITEM, parent), scoreWhenEquipped(scoreWhenEquipped), canBeUsedToAttack(canBeUsedToAttack), attackDamage(attackDamage), projectileDamage(projectileDamage), requiredParentWhenEquipping(requiredParentWhenEquipping)
 {
 	assert(parent);
 }
@@ -32,9 +32,9 @@ unsigned int Item::getAttackDamage() const
 	return attackDamage;
 }
 
-unsigned int Item::getThrowDamage() const
+unsigned int Item::getProjectileDamage() const
 {
-	return throwDamage;
+	return projectileDamage;
 }
 
 unsigned int Item::getScoreWhenEquipped()

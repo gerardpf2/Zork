@@ -37,7 +37,7 @@ class World
 
 		vector<Entity*> entities;
 
-		clock_t lastUpdateTime;
+		clock_t lastUpdateTime = -1;
 };
 
 #endif

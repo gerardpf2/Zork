@@ -17,12 +17,12 @@ World::World()
 	Room* room3 = new Room("Room3", "Description Room3");
 	Room* room4 = new Room("Room4", "Description Room4");
 
-	combatSystem = new CombatSystem(/* player, enemy, */ 3, 3, 2, 1, CombatDirectionType::UP, 0, 1, CombatDirectionType::DOWN);
+	combatSystem = new CombatSystem(5, 5, 4, 2, CombatDirectionType::UP, 0, 2, CombatDirectionType::DOWN, 6, 4);
 
-	enemy = new Enemy("Enemy", "Description Enemy", room0, combatSystem, 3);
+	enemy = new Enemy("Enemy", "Description Enemy", room0, combatSystem, 1);
 	player = new Player("Player", "Description Player", room0, combatSystem, 5);
 
-	Item* boat = new Item("Boat", "Description Boat", room0, 5, false, 0, 2);
+	Item* boat = new Item("Boat", "Description Boat", room0, 5, false, 0, 1);
 	Item* sword = new Item("Sword", "Description Sword", player, 5, true, 1, 1);
 	// Item* sword = new Item("Sword", "Description Sword", room0, 5, true, 1, 1);
 	Item* shield = new Item("Shield", "Description Shield", room0, 5, false, 0, 1);
@@ -82,7 +82,7 @@ World::World()
 	entities.push_back(enemy);
 	entities.push_back(player);
 
-	if(enemy->isAlive()) enemy->lockItems(true);
+	if(enemy->isAlive()) enemy->lockItems(true, true);
 }
 
 World::~World()
@@ -121,8 +121,6 @@ void World::update()
 
 	for(unsigned int i = 0; i < entities.size(); ++i)
 		entities[i]->update(msDeltaTime);
-
-	combatSystem->update(msDeltaTime); // ¿?
 
 	lastUpdateTime = currentUpdateTime;
 }

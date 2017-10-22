@@ -42,13 +42,14 @@ void CommandListener::listen(bool& stop)
 		}
 		else if(playerInput != "")
 		{
+			string tmpPlayerInput = playerInput;
+			playerInput = "";
 			cout << endl << endl;
-			if(!process(playerInput, stop)) cout << "I do not understand your command." << endl;
+			if(!process(tmpPlayerInput, stop)) cout << "I do not understand your command." << endl;
 			player->incrementMoves();
 			printCommandEnding();
-			if(history.empty() || playerInput != *(--history.end())) history.push_back(playerInput);
+			if(history.empty() || tmpPlayerInput != *(--history.end())) history.push_back(tmpPlayerInput);
 			currentHistoryItem = history.end();
-			playerInput = "";
 		}
 	}
 }
@@ -62,25 +63,23 @@ void CommandListener::printHelloMessage() const
 
 void CommandListener::printGoodbyeMessage() const
 {
-	cout << "Goodbye!" << endl;
+	cout << "Thanks for playing. Goodbye!" << endl;
 	printCommandEnding();
 }
 
-void CommandListener::printDynamic(const string& text)
+void CommandListener::printDynamic(const string& text, bool ending)
 {
-	if(!playerInput.empty())
-	{
-		string tmpPlayerInput = playerInput;
+	string tmpPlayerInput = playerInput;
 
-		removeCharacters(playerInput.size());
+	removeCharacters(tmpPlayerInput.size());
 
-		cout << text << endl;
+	cout << text << endl;
 
-		playerInput = tmpPlayerInput;
+	if(ending) printCommandEnding();
 
-		cout << playerInput;
-	}
-	else cout << text << endl;
+	playerInput = tmpPlayerInput;
+
+	cout << playerInput;
 }
 
 bool CommandListener::process(const string& command, bool& stop) const
@@ -114,7 +113,8 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 		case 0:
 			if(action == "quit" || action == "q") stop = true;
 			else if(action == "look" || action == "l") player->look();
-			else if (action == "commands" || action == "c") printCommands();
+			else if(action == "commands" || action == "c") printCommands();
+			else if(action == "battle" || action == "b") player->battle();
 			else if(action == "inventory" || action == "i") player->inventory();
 			else commandOk = false;
 
@@ -124,12 +124,15 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 			else if(action == "go" || action == "g") player->go(tokens);
 			else if(action == "take" || action == "t") player->take(tokens);
 			else if(action == "drop" || action == "d") player->drop(tokens);
+			else if(action == "attack" || action == "a") player->attack(tokens);
+			else if(action == "projectile" || action == "pr") player->projectile(tokens);
+			else if(action == "move" || action == "m") player->move(tokens);
+			else if(action == "rotate" || action == "r") player->rotate(tokens);
 			else commandOk = false;
 
 			break;
 		case 2:
 			if(action == "place" || action == "p") player->place(tokens);
-			else if(action == "attack" || action == "a") player->attack(tokens);
 			else commandOk = false;
 
 			break;
@@ -167,21 +170,38 @@ void CommandListener::printNextHistoryItem()
 void CommandListener::printCommands() const
 {
 	cout << "quit, q" << endl;
-	cout << "help, h" << endl;
+	cout << "\tQuits the game." << endl;
+	cout << "commands, c" << endl;
+	cout << "\tDisplays all the commands." << endl;
+	cout << "battle, b" << endl;
+	cout << "\tStarts a battle. The player and the enemy must be in the same room." << endl;
 	cout << "inventory, i" << endl;
-	cout << "look, l [me, _item_ || _enemy_]" << endl;
+	cout << "\tDisplays all the items that the player owns." << endl;
+	cout << "look, l ['me', _item_ or _enemy_]" << endl;
+	cout << "\tShows information about the specified entity. Parameters are optional.\n\t'me' refers to the player itself. _item_ and _enemy_ are ingame names." << endl;
 	cout << "go, g _direction_" << endl;
+	cout << "\tThe player goes to another room. _direction_ can be: 'n', 's', 'e',\n\t'w', 'ne', 'nw', 'se' or 'sw'. 'north' and 'North' are valid too (and so on)." << endl;
 	cout << "take, t _item_" << endl;
+	cout << "\tThe player takes an item. The player and the item must be in the same\n\troom. The item must not be owned by the player. _item_ is an ingame name." << endl;
 	cout << "drop, d _item_" << endl;
+	cout << "\tThe player drops an item. The item must be owned by the player. _item_\n\tis an ingame name." << endl;
 	cout << "place, p _item_ _item_" << endl;
-	cout << "attack, a _item_ _enemy_" << endl;
+	cout << "\tThe player places an item inside another one. Both must be owned by the\n\tplayer. _item_ is an ingame name." << endl;
+	cout << "(combat mode) attack, a _item_" << endl;
+	cout << "\tThe player attacks the enemy using the specified item. The item must be\n\towned by the player. _item_ is an ingame name." << endl;
+	cout << "(combat mode) projectile, pr _item_" << endl;
+	cout << "\tThe player throws the specified item to the enemy. The item must be owned\n\tby the player. The item is dropped. _item_ is an ingame name." << endl;
+	cout << "(combat mode) move, m _combatDirection_" << endl;
+	cout << "\tThe player moves in the specified direction. _combatDirection_ can be: 'u',\n\t'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl;
+	cout << "(combat mode) rotate, r _combatDirection_" << endl;
+	cout << "\tThe player rotates in the specified direction. _combatDirection_ can be: 'u',\n\t'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl;
 }
 
 void CommandListener::printCommandEnding() const
 {
 	assert(player);
 
-	cout << "------------------------------ Score: " << player->getScore() << ", Moves: " << player->getMoves() << endl;
+	cout << "------------------------------ Health: " << player->getHealth() << ", Score: " << player->getScore() << ", Moves: " << player->getMoves() << endl;
 }
 
 void CommandListener::removeCharacters(unsigned int amount)

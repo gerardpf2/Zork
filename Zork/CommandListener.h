@@ -23,11 +23,11 @@ class CommandListener
 
 		void printGoodbyeMessage() const;
 
-		void printDynamic(const string& text);
-
-	private:
+		void printDynamic(const string& text, bool ending = false);
 
 		bool process(const string& command, bool& stop) const;
+
+	private:
 
 		void split(const string& command, vector<string>& tokens) const;
 
@@ -39,9 +39,9 @@ class CommandListener
 
 		void printCommands() const;
 
-		void printCommandEnding() const;
-
 		void removeCharacters(unsigned int amount);
+
+		void printCommandEnding() const;
 
 	private:
 

@@ -9,7 +9,7 @@
 #include "CombatSystem.h"
 
 Player::Player(const char* name, const char* description, Room* room, CombatSystem* combatSystem, int health) :
-	Creature(name, description, EntityType::PLAYER, room, health, 1500), score(0), moves(0), combatSystem(combatSystem)
+	Creature(name, description, EntityType::PLAYER, room, health, 2000), combatSystem(combatSystem)
 {
 	assert(combatSystem);
 }
@@ -74,6 +74,35 @@ void Player::look(const vector<string>& tokens) const
 	}
 }
 
+void Player::battle()
+{
+	// 0 parameters
+
+	if(getInCombat())
+	{
+		cout << "You are already in a battle." << endl;
+		return;
+	}
+
+	const list<Entity*>* enemies = getParent()->getAllChildren(EntityType::ENEMY);
+
+	if(!enemies->empty())
+	{
+		Enemy* enemy = ((Enemy*)enemies->front());
+
+		if(enemy->isAlive())
+		{
+			setInCombat(true);
+			((Enemy*)enemies->front())->setInCombat(true);
+
+			combatSystem->printBattlefield();
+			cout << "Battle starts NOW!" << endl;
+		}
+		else cout << enemy->getName() << " is already dead." << endl;
+	}
+	else cout << "There is no enemy here." << endl;
+}
+
 void Player::inventory() const
 {
 	// 0 parameters
@@ -102,7 +131,7 @@ void Player::go(const vector<string>& tokens)
 
 	if(getInCombat())
 	{
-		cout << "You can not go anywhere if you are in a battle." << endl;
+		cout << "You cannot go anywhere if you are in a battle." << endl;
 		return;
 	}
 
@@ -194,7 +223,7 @@ void Player::take(const vector<string>& tokens)
 					cout << "You take " << name << "." << endl;
 				}
 			}
-			else cout << name << " can not be taken." << endl;
+			else cout << name << " cannot be taken." << endl;
 		}
 	}
 	else cout << name << " is not here." << endl;
@@ -215,6 +244,203 @@ void Player::drop(const vector<string>& tokens) const
 		cout << "You drop " << name << "." << endl;
 	}
 	else cout << name << " is not in your inventory." << endl;
+}
+
+void Player::attack(const vector<string>& tokens)
+{
+	// 2 parameters (_item_)
+
+	assert(tokens.size() == 2);
+
+	if(!getInCombat())
+	{
+		cout << "You are not in a battle." << endl;
+		return;
+	}
+
+	string itemName = tokens[1];
+	Entity* entityItem = getChild(EntityType::ITEM, itemName.c_str(), true);
+
+	if(entityItem)
+	{
+		const list<Entity*>* entitiesEnemy = getParent()->getAllChildren(EntityType::ENEMY);
+
+		if(!entitiesEnemy->empty())
+		{
+			Item* item = (Item*)entityItem;
+
+			if(item->getCanBeUsedToAttack())
+			{
+				if(canDoAction())
+				{
+					Entity* entityEnemy = entitiesEnemy->front();
+
+					if(combatSystem->playerAttackCanHit())
+					{
+						if(!combatSystem->playerMissAttack())
+						{
+							Enemy* enemy = (Enemy*)entityEnemy;
+
+							enemy->takeDamage(item->getAttackDamage());
+
+							if(!enemy->isAlive())
+							{
+								setInCombat(false);
+								cout << "You win!" << endl;
+							}
+						}
+						else cout << "You missed..." << endl;
+
+						doAction();
+					}
+					else
+					{
+						if(combatSystem->playerFacingEnemy()) cout << "You are not close enough to " << entityEnemy->getName() << "." << endl;
+						else cout << "You are not facing " << entityEnemy->getName() << "." << endl;
+					}
+				}
+				else cout << "You are tired." << endl;
+			}
+			else cout << itemName << " cannot be used to attack." << endl;
+		}
+		else cout << "There is no enemy here." << endl;
+	}
+	else cout << itemName << " is not in your inventory." << endl;
+}
+
+void Player::projectile(const vector<string>& tokens)
+{
+	// 2 parameters (_item_)
+
+	assert(tokens.size() == 2);
+
+	if(!getInCombat())
+	{
+		cout << "You are not in a battle." << endl;
+		return;
+	}
+
+	string itemName = tokens[1];
+	Entity* entityItem = getChild(EntityType::ITEM, itemName.c_str(), true);
+
+	if(entityItem)
+	{
+		const list<Entity*>* entitiesEnemy = getParent()->getAllChildren(EntityType::ENEMY);
+
+		if(!entitiesEnemy->empty())
+		{
+			Item* item = (Item*)entityItem;
+
+			if(canDoAction())
+			{
+				Entity* entityEnemy = entitiesEnemy->front();
+
+				if(combatSystem->playerProjectileCanHit())
+				{
+					if(!combatSystem->playerMissProjectile())
+					{
+						Enemy* enemy = (Enemy*)entityEnemy;
+
+						enemy->takeDamage(item->getProjectileDamage());
+
+						if(!enemy->isAlive())
+						{
+							setInCombat(false);
+							cout << "You win!" << endl;
+						}
+					}
+					else cout << "You missed..." << endl;
+
+					doAction();
+				}
+				else cout << "You are not facing " << entityEnemy->getName() << "." << endl;
+
+				item->assignNewParent((Entity*)getParent());
+			}
+			else cout << "You are tired." << endl;
+		}
+		else cout << "There is no enemy here." << endl;
+	}
+	else cout << itemName << " is not in your inventory." << endl;
+}
+
+void Player::move(const vector<string>& tokens)
+{
+	// 1 parameter (_combatDirection_)
+
+	assert(tokens.size() == 2);
+
+	if(!getInCombat())
+	{
+		cout << "You are not in a battle." << endl;
+		return;
+	}
+
+	string name = tokens[1];
+
+	int rowIncrement = 0;
+	int columnIncrement = 0;
+
+	if(name == "u" || name == "up" || name == "Up") rowIncrement = -1;
+	else if(name == "d" || name == "down" || name == "Down") rowIncrement = 1;
+	else if(name == "l" || name == "left" || name == "Left") columnIncrement = -1;
+	else if(name == "r" || name == "right" || name == "Right") columnIncrement = 1;
+	else
+	{
+		cout << "Combat direction " << name << " does not exist." << endl;
+		return;
+	}
+
+	if(combatSystem->canMovePlayer(rowIncrement, columnIncrement))
+	{
+		if(canDoAction())
+		{
+			doAction();
+			combatSystem->movePlayer(rowIncrement, columnIncrement);
+			cout << "You move to " << name << "." << endl;
+		}
+		else cout << "You are tired." << endl;
+	}
+	else cout << "You cannot move to " << name << "." << endl;
+}
+
+void Player::rotate(const vector<string>& tokens)
+{
+	// 1 parameter (_combatDirection_)
+
+	assert(tokens.size() == 2);
+
+	if(!getInCombat())
+	{
+		cout << "You are not in a battle." << endl;
+		return;
+	}
+
+	string name = tokens[1];
+
+	CombatDirectionType combatDirectionType;
+
+	if(name == "u" || name == "up" || name == "Up") combatDirectionType = CombatDirectionType::UP;
+	else if(name == "d" || name == "down" || name == "Down") combatDirectionType = CombatDirectionType::DOWN;
+	else if(name == "l" || name == "left" || name == "Left") combatDirectionType = CombatDirectionType::LEFT;
+	else if(name == "r" || name == "right" || name == "Right") combatDirectionType = CombatDirectionType::RIGHT;
+	else
+	{
+		cout << "Combat direction " << name << " does not exist." << endl;
+		return;
+	}
+
+	if(combatSystem->canRotatePlayer(combatDirectionType))
+	{
+		if(canDoAction())
+		{
+			doAction();
+			combatSystem->rotatePlayer(combatDirectionType);
+			cout << "You rotate to " << name << "." << endl;
+		}
+		else cout << "You are tired." << endl;
+	}
+	else cout << "You cannot rotate to " << name << "." << endl;
 }
 
 void Player::place(const vector<string>& tokens) const
@@ -262,40 +488,7 @@ void Player::place(const vector<string>& tokens) const
 	else cout << name << " is not in your inventory." << endl;
 }
 
-void Player::attack(const vector<string>& tokens)
+void Player::die()
 {
-	// 2 parameters (_item_, _enemy_)
-
-	assert(tokens.size() == 3);
-
-	string itemName = tokens[1];
-	Entity* entityItem = getChild(EntityType::ITEM, itemName.c_str(), true);
-
-	if(entityItem)
-	{
-		string enemyName = tokens[2];
-		Entity* entityEnemy = getParent()->getChild(EntityType::ENEMY, enemyName.c_str(), true);
-
-		if(entityEnemy)
-		{
-			Item* item = (Item*)entityItem;
-
-			if(item->getCanBeUsedToAttack())
-			{
-				if(canDoAction())
-				{
-					Enemy* enemy = (Enemy*)entityEnemy;
-
-					doAction();
-					setInCombat(true);
-					enemy->setInCombat(true);
-					enemy->takeDamage(item->getAttackDamage());
-				}
-				else cout << "You are tired." << endl;
-			}
-			else cout << itemName << " can not be used to attack." << endl;
-		}
-		else cout << enemyName << " is not here." << endl;
-	}
-	else cout << itemName << " is not in your inventory." << endl;
+	cout << "You lose." << endl;
 }

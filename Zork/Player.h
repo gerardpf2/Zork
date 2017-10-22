@@ -27,6 +27,8 @@ class Player : public Creature
 
 		void look(const vector<string>& tokens) const;
 
+		void battle();
+
 		void inventory() const;
 
 		void go(const vector<string>& tokens);
@@ -35,15 +37,25 @@ class Player : public Creature
 
 		void drop(const vector<string>& tokens) const;
 
-		void place(const vector<string>& tokens) const;
-
 		void attack(const vector<string>& tokens);
+
+		void projectile(const vector<string>& tokens);
+
+		void move(const vector<string>& tokens);
+
+		void rotate(const vector<string>& tokens);
+
+		void place(const vector<string>& tokens) const;
 
 	private:
 
-		unsigned int score;
+		void die() override;
 
-		unsigned int moves;
+	private:
+
+		unsigned int score = 0;
+
+		unsigned int moves = 0;
 
 		CombatSystem* combatSystem = nullptr;
 };

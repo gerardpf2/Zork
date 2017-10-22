@@ -1,11 +1,6 @@
 #ifndef _CombatSystem_
 #define _CombatSystem_
 
-#include <time.h>
-
-/* class Enemy;
-class Player; */
-
 enum class CombatDirectionType
 {
 	UP,
@@ -20,7 +15,7 @@ class CombatSystem
 {
 	public:
 
-		CombatSystem(/* Player* player, Enemy* enemy, */ int rows, int columns, int playerRow, int playerColumn, CombatDirectionType playerDirection, int enemyRow, int enemyColumn, CombatDirectionType enemyDirection, int cellWidth = 4, int cellHeight = 4);
+		CombatSystem(int rows, int columns, int playerRow, int playerColumn, CombatDirectionType playerDirection, int enemyRow, int enemyColumn, CombatDirectionType enemyDirection, int cellWidth, int cellHeight);
 
 		~CombatSystem();
 
@@ -42,37 +37,51 @@ class CombatSystem
 
 		void rotateEnemy(CombatDirectionType enemyDirection);
 
-		void update(clock_t msDeltaTime);
+		bool playerAttackCanHit() const;
 
-	private:
+		bool enemyAttackCanHit() const;
+
+		bool playerProjectileCanHit() const;
+
+		bool playerMissAttack() const;
+
+		bool enemyMissAttack() const;
+
+		bool playerMissProjectile() const;
+
+		void enemyFindMove(int& rowIncrement, int& columnIncrement) const;
+
+		bool playerFacingEnemy() const;
+
+		bool enemyFacingPlayer() const;
+
+		CombatDirectionType enemyFindRotation() const;
+
+		bool enemyRotationSame() const;
 
 		void printBattlefield() const;
 
 	private:
 
-		/* Player* player;
+		int playerRow = -1;
 
-		Enemy* enemy; */
-
-		int playerRow = 2;
-
-		int playerColumn = 1;
+		int playerColumn = -1;
 
 		CombatDirectionType playerDirection = CombatDirectionType::UP;
 
-		int enemyRow = 0;
+		int enemyRow = -1;
 
-		int enemyColumn = 1;
+		int enemyColumn = -1;
 
-		CombatDirectionType enemyDirection = CombatDirectionType::DOWN;
+		CombatDirectionType enemyDirection = CombatDirectionType::UP;
 
-		int rows = 3;
+		int rows = -1;
 
-		int columns = 3;
+		int columns = -1;
 
-		int cellWidth = 4;
+		int cellWidth = -1;
 
-		int cellHeight = 4;
+		int cellHeight = -1;
 
 		CommandListener* commandListener = nullptr;
 };

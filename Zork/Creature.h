@@ -13,6 +13,8 @@ class Creature : public Entity
 
 		bool isAlive() const;
 
+		int getHealth() const;
+
 		void takeDamage(unsigned int amount = 1);
 
 		bool getInCombat() const;
@@ -31,21 +33,21 @@ class Creature : public Entity
 
 	protected:
 
-		Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction);
+		Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction, int currentMsNextAction = 0);
 
 		virtual void die();
 
 	private:
 
-		int health;
+		int health = -1;
 
-		bool alive;
+		bool alive = false;
 
-		bool inCombat;
+		bool inCombat = false;
 
-		int msNextAction;
+		int msNextAction = -1;
 
-		int currentMsNextAction = 0;
+		int currentMsNextAction = -1;
 };
 
 #endif

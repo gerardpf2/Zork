@@ -42,9 +42,7 @@ class Entity
 
 		const list<Entity*>* getAllChildren(EntityType entityType) const;
 
-		void lockItems(bool recursive = false) const;
-
-		void unlockItems(bool recursive = false) const;
+		void lockItems(bool lock, bool recursive = false) const;
 
 		virtual void update(clock_t msDeltaTime);
 
@@ -64,9 +62,9 @@ class Entity
 
 	private:
 
-		const char* name;
+		const char* name = nullptr;
 
-		const char* description;
+		const char* description = nullptr;
 
 		EntityType entityType;
 

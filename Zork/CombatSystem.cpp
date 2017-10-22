@@ -3,11 +3,17 @@
 #include <assert.h>
 #include "CommandListener.h"
 
-CombatSystem::CombatSystem(/* Player* player, Enemy* enemy, */ int rows, int columns, int playerRow, int playerColumn, CombatDirectionType playerDirection, int enemyRow, int enemyColumn, CombatDirectionType enemyDirection, int cellWidth, int cellHeight) :
-	/* player(player), enemy(enemy), */ rows(rows), columns(columns), playerRow(playerRow), playerColumn(playerColumn), playerDirection(playerDirection), enemyRow(enemyRow), enemyColumn(enemyColumn), enemyDirection(enemyDirection), cellWidth(cellWidth), cellHeight(cellHeight)
+CombatSystem::CombatSystem(int rows, int columns, int playerRow, int playerColumn, CombatDirectionType playerDirection, int enemyRow, int enemyColumn, CombatDirectionType enemyDirection, int cellWidth, int cellHeight) :
+	rows(rows), columns(columns), playerRow(playerRow), playerColumn(playerColumn), playerDirection(playerDirection), enemyRow(enemyRow), enemyColumn(enemyColumn), enemyDirection(enemyDirection), cellWidth(cellWidth), cellHeight(cellHeight)
 {
-	/* assert(enemy);
-	assert(player); */
+	assert(rows > 0);
+	assert(columns > 0);
+	assert(playerRow >= 0);
+	assert(playerColumn >= 0);
+	assert(enemyRow >= 0);
+	assert(enemyColumn >= 0);
+	assert(cellWidth > 0);
+	assert(cellHeight > 0);
 	assert(enemyRow < rows);
 	assert(playerRow < rows);
 	assert(enemyColumn < columns);
@@ -26,36 +32,48 @@ void CombatSystem::setCommandListener(CommandListener* commandListener)
 
 bool CombatSystem::canMovePlayer(int rowIncrement, int columnIncrement) const
 {
-	return abs(rowIncrement) + abs(columnIncrement) == 1 && (playerRow + rowIncrement != enemyRow || playerColumn + columnIncrement != enemyColumn) && playerRow + rowIncrement >= 0 && playerRow + rowIncrement < rows && playerColumn + columnIncrement >= 0 && playerColumn + columnIncrement < columns;
+	int playerNextRow = playerRow + rowIncrement;
+	int playerNextColumn = playerColumn + columnIncrement;
+	
+	return abs(rowIncrement) + abs(columnIncrement) == 1 && (playerNextRow != enemyRow || playerNextColumn != enemyColumn) && playerNextRow >= 0 && playerNextRow < rows && playerNextColumn >= 0 && playerNextColumn < columns;
 }
 
 bool CombatSystem::canMoveEnemy(int rowIncrement, int columnIncrement) const
 {
-	return abs(rowIncrement) + abs(columnIncrement) == 1 && (enemyRow + rowIncrement != playerRow || enemyColumn + columnIncrement != playerColumn) && enemyRow + rowIncrement >= 0 && enemyRow + rowIncrement < rows && enemyColumn + columnIncrement >= 0 && enemyColumn + columnIncrement < columns;
+	int enemyNextRow = enemyRow + rowIncrement;
+	int enemyNextColumn = enemyColumn + columnIncrement;
+
+	return abs(rowIncrement) + abs(columnIncrement) == 1 && (enemyNextRow != playerRow || enemyNextColumn != playerColumn) && enemyNextRow >= 0 && enemyNextRow < rows && enemyNextColumn >= 0 && enemyNextColumn < columns;
 }
 
 void CombatSystem::movePlayer(int rowIncrement, int columnIncrement)
 {
-	assert(abs(rowIncrement) + abs(columnIncrement) == 1);
-	assert(playerRow + rowIncrement != enemyRow || playerColumn + columnIncrement != enemyColumn);
-	assert(playerRow + rowIncrement >= 0 && playerRow + rowIncrement < rows);
-	assert(playerColumn + columnIncrement >= 0 && playerColumn + columnIncrement < columns);
+	int playerNextRow = playerRow + rowIncrement;
+	int playerNextColumn = playerColumn + columnIncrement;
 
-	playerRow += rowIncrement;
-	playerColumn += columnIncrement;
+	assert(playerNextRow >= 0 && playerNextRow < rows);
+	assert(abs(rowIncrement) + abs(columnIncrement) == 1);
+	assert(playerNextColumn >= 0 && playerNextColumn < columns);
+	assert(playerNextRow != enemyRow || playerNextColumn != enemyColumn);
+
+	playerRow = playerNextRow;
+	playerColumn = playerNextColumn;
 
 	printBattlefield();
 }
 
 void CombatSystem::moveEnemy(int rowIncrement, int columnIncrement)
 {
-	assert(abs(rowIncrement) + abs(columnIncrement) == 1);
-	assert(enemyRow + rowIncrement != playerRow || enemyColumn + columnIncrement != playerColumn);
-	assert(enemyRow + rowIncrement >= 0 && enemyRow + rowIncrement < rows);
-	assert(enemyColumn + columnIncrement >= 0 && enemyColumn + columnIncrement < columns);
+	int enemyNextRow = enemyRow + rowIncrement;
+	int enemyNextColumn = enemyColumn + columnIncrement;
 
-	enemyRow += rowIncrement;
-	enemyColumn += columnIncrement;
+	assert(enemyNextRow >= 0 && enemyNextRow < rows);
+	assert(abs(rowIncrement) + abs(columnIncrement) == 1);
+	assert(enemyNextColumn >= 0 && enemyNextColumn < columns);
+	assert(enemyNextRow != playerRow || enemyNextColumn != playerColumn);
+
+	enemyRow = enemyNextRow;
+	enemyColumn = enemyNextColumn;
 
 	printBattlefield();
 }
@@ -88,11 +106,6 @@ void CombatSystem::rotateEnemy(CombatDirectionType enemyDirection)
 	printBattlefield();
 }
 
-void CombatSystem::update(clock_t msDeltaTime)
-{
-	// system("CLS");
-}
-
 void calculateDirectionCharAndPosition(CombatDirectionType combatDirectionType, const char* directionCharUpDown, const char* directionCharLeftRight, int incrementUpDown, int incrementLeftRight, const char*& directionChar, int& directionPosition)
 {
 	assert(directionCharUpDown);
@@ -121,6 +134,154 @@ void calculateDirectionCharAndPosition(CombatDirectionType combatDirectionType, 
 
 			break;
 	}
+}
+
+bool CombatSystem::playerAttackCanHit() const
+{
+	return abs(playerRow - enemyRow) + abs(playerColumn - enemyColumn) == 1 && playerFacingEnemy();
+}
+
+bool CombatSystem::enemyAttackCanHit() const
+{
+	return abs(enemyRow - playerRow) + abs(enemyColumn - playerColumn) == 1 && enemyFacingPlayer();
+}
+
+bool CombatSystem::playerProjectileCanHit() const
+{
+	return playerRow == enemyRow || playerColumn == enemyColumn && playerFacingEnemy();
+}
+
+bool CombatSystem::playerMissAttack() const
+{
+	// 20% miss
+
+	return (float)rand() / (float)RAND_MAX <= 0.2f;
+}
+
+bool CombatSystem::enemyMissAttack() const
+{
+	// 20% miss
+
+	return (float)rand() / (float)RAND_MAX <= 0.2f;
+}
+
+bool CombatSystem::playerMissProjectile() const
+{
+	// 40% miss
+
+	return (float)rand() / (float)RAND_MAX <= 0.4f;
+}
+
+void CombatSystem::enemyFindMove(int& rowIncrement, int& columnIncrement) const
+{
+	rowIncrement = 0;
+	columnIncrement = 0;
+
+	if(enemyRow == playerRow)
+	{
+		if(enemyColumn < playerColumn) columnIncrement = 1;
+		if(enemyColumn > playerColumn) columnIncrement = -1;
+	}
+	else if(enemyColumn == playerColumn)
+	{
+		if(enemyRow < playerRow) rowIncrement = 1;
+		if(enemyRow > playerRow) rowIncrement = -1;
+	}
+	else
+	{
+		int rowDistance = enemyRow - playerRow;
+		int columnDistance = enemyColumn - playerColumn;
+
+		int absRowDistance = abs(rowDistance);
+		int absColumnDistance = abs(columnDistance);
+
+		if(absRowDistance > 0 && absRowDistance <= absColumnDistance)
+		{
+			if(columnDistance > 0) columnIncrement = -1;
+			else columnIncrement = 1;
+
+			/* if(rowDistance > 0) rowIncrement = -1;
+			else rowIncrement = 1; */
+		}
+		else if(absColumnDistance > 0)
+		{
+			if(rowDistance > 0) rowIncrement = -1;
+			else rowIncrement = 1;
+
+			/* if(columnDistance > 0) columnIncrement = -1;
+			else columnIncrement = 1; */
+		}
+	}
+}
+
+bool CombatSystem::playerFacingEnemy() const
+{
+	if(playerRow == enemyRow)
+	{
+		if(playerColumn > enemyColumn && playerDirection == CombatDirectionType::LEFT) return true;
+		if(playerColumn < enemyColumn && playerDirection == CombatDirectionType::RIGHT) return true;
+	}
+	else if(playerColumn == enemyColumn)
+	{
+		if(playerRow > enemyRow && playerDirection == CombatDirectionType::UP) return true;
+		if(playerRow < enemyRow && playerDirection == CombatDirectionType::DOWN) return true;
+	}
+
+	return false;
+}
+
+bool CombatSystem::enemyFacingPlayer() const
+{
+	if(enemyRow == playerRow)
+	{
+		if(enemyColumn > playerColumn && enemyDirection == CombatDirectionType::LEFT) return true;
+		if(enemyColumn < playerColumn && enemyDirection == CombatDirectionType::RIGHT) return true;
+	}
+	else if(enemyColumn == playerColumn)
+	{
+		if(enemyRow > playerRow && enemyDirection == CombatDirectionType::UP) return true;
+		if(enemyRow < playerRow && enemyDirection == CombatDirectionType::DOWN) return true;
+	}
+
+	return false;
+}
+
+CombatDirectionType CombatSystem::enemyFindRotation() const
+{
+	if(enemyRow == playerRow)
+	{
+		if(enemyColumn > playerColumn) return CombatDirectionType::LEFT;
+		if(enemyColumn < playerColumn) return CombatDirectionType::RIGHT;
+	}
+	else if(enemyColumn == playerColumn)
+	{
+		if(enemyRow > playerRow) return CombatDirectionType::UP;
+		if(enemyRow < playerRow) return CombatDirectionType::DOWN;
+	}
+
+	int rowDistance = enemyRow - playerRow;
+	int columnDistance = enemyColumn - playerColumn;
+
+	int absRowDistance = abs(rowDistance);
+	int absColumnDistance = abs(columnDistance);
+
+	if(absRowDistance > 0 && absRowDistance < absColumnDistance)
+	{
+		if(rowDistance > 0) return CombatDirectionType::UP;
+		return CombatDirectionType::DOWN;
+	}
+	else if(absColumnDistance > 0 && absRowDistance > absColumnDistance)
+	{
+		if(columnDistance > 0) return CombatDirectionType::LEFT;
+		return CombatDirectionType::RIGHT;
+	}
+
+	return enemyDirection;
+}
+
+bool CombatSystem::enemyRotationSame() const
+{
+	return enemyFindRotation() == enemyDirection;
 }
 
 void CombatSystem::printBattlefield() const
