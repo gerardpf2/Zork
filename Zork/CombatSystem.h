@@ -21,13 +21,13 @@ class CombatSystem
 
 		void setCommandListener(CommandListener* commandListener);
 
-		bool canMovePlayer(int rowIncrement, int columnIncrement) const;
+		bool canMovePlayer(CombatDirectionType combatDirectionType) const;
 
-		bool canMoveEnemy(int rowIncrement, int columnIncrement) const;
+		bool canMoveEnemy(CombatDirectionType combatDirectionType) const;
 
-		void movePlayer(int rowIncrement, int columnIncrement);
+		void movePlayer(CombatDirectionType combatDirectionType);
 
-		void moveEnemy(int rowIncrement, int columnIncrement);
+		void moveEnemy(CombatDirectionType combatDirectionType);
 
 		bool canRotatePlayer(CombatDirectionType playerDirection) const;
 
@@ -49,7 +49,7 @@ class CombatSystem
 
 		bool playerMissProjectile() const;
 
-		void enemyFindMove(int& rowIncrement, int& columnIncrement) const;
+		CombatDirectionType enemyFindMove() const;
 
 		bool playerFacingEnemy() const;
 
@@ -60,6 +60,12 @@ class CombatSystem
 		bool enemyRotationSame() const;
 
 		void printBattlefield() const;
+
+	private:
+
+		void getRowColumnIncrement(CombatDirectionType combatDirectionType, int& rowIncrement, int& columnIncrement) const;
+
+		CombatDirectionType getCombatDirectionType(int rowIncrement, int columnIncrement) const;
 
 	private:
 

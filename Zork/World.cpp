@@ -22,14 +22,13 @@ World::World()
 	enemy = new Enemy("Enemy", "Description Enemy", room0, combatSystem, 1);
 	player = new Player("Player", "Description Player", room0, combatSystem, 5);
 
-	Item* boat = new Item("Boat", "Description Boat", room0, 5, false, 0, 1);
-	Item* sword = new Item("Sword", "Description Sword", player, 5, true, 1, 1);
-	// Item* sword = new Item("Sword", "Description Sword", room0, 5, true, 1, 1);
-	Item* shield = new Item("Shield", "Description Shield", room0, 5, false, 0, 1);
-	Item* oar = new Item("Oar", "Description Oar", room0, 10, false, 0, 1, boat);
-	Item* sail = new Item("Sail", "Description Sail", room0, 10, false, 0, 1, boat);
-	Item* shell = new Item("Shell", "Description Shell", room0, 1, false, 0, 1);
-	Item* treasure = new Item("Treasure", "Description Treasure", enemy, 100, false, 0, 1);
+	Item* boat = new Item("Boat", "Description Boat", room0, 10, 0, 2, 0);
+	Item* sword = new Item("Sword", "Description Sword", player, 5, 1, 1, 0);
+	Item* coconut = new Item("Coconut", "Description Coconut", room0, 5, 0, 1, 1);
+	Item* oar = new Item("Oar", "Description Oar", room0, 10, 0, 1, 0, boat);
+	Item* sail = new Item("Sail", "Description Sail", room0, 10, 0, 1, 0, boat);
+	Item* shell = new Item("Shell", "Description Shell", room0, 5, 0, 1, 0);
+	Item* treasure = new Item("Treasure", "Description Treasure", enemy, 100, 0, 1, 0);
 
 	/* Item* boat = new Item("Boat", "Description Boat", room0);
 	Item* sword = new Item("Sword", "Description Sword", room1);
@@ -61,7 +60,7 @@ World::World()
 	// Items 7
 	entities.push_back(boat);
 	entities.push_back(sword);
-	entities.push_back(shield);
+	entities.push_back(coconut);
 	entities.push_back(oar);
 	entities.push_back(sail);
 	entities.push_back(shell);
@@ -87,7 +86,7 @@ World::World()
 
 World::~World()
 {
-	for(unsigned int i = 0; i < entities.size(); ++i)
+	for(int i = entities.size() - 1; i >= 0; --i)
 	{
 		delete entities[i];
 		entities[i] = nullptr;

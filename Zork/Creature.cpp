@@ -5,7 +5,7 @@
 #include <iostream>
 
 Creature::Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction, int currentMsNextAction) :
-	Entity(name, description, entityType, room), health(health), msNextAction(msNextAction), currentMsNextAction(currentMsNextAction)
+	Entity(name, description, entityType, room), health(health), maxHealth(health), msNextAction(msNextAction), currentMsNextAction(currentMsNextAction)
 {
 	assert(room);
 
@@ -32,6 +32,18 @@ void Creature::takeDamage(unsigned int amount)
 		die();
 		alive = false;
 	}
+}
+
+bool Creature::canIncrementHealth() const
+{
+	return health < maxHealth;
+}
+
+void Creature::incrementHealth(unsigned int amount)
+{
+	health += amount;
+
+	if(health > maxHealth) health = maxHealth;
 }
 
 bool Creature::getInCombat() const

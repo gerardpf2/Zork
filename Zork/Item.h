@@ -7,7 +7,7 @@ class Item : public Entity
 {
 	public:
 
-		Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, bool canBeUsedToAttack, unsigned int attackDamage, unsigned int projectileDamage, Item* requiredParentWhenEquipping = nullptr);
+		Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, unsigned int attackDamage, unsigned int projectileDamage, unsigned int healAmount, Item* requiredParentWhenEquipping = nullptr);
 
 		virtual ~Item();
 
@@ -21,7 +21,15 @@ class Item : public Entity
 
 		unsigned int getProjectileDamage() const;
 
-		unsigned int getScoreWhenEquipped();
+		bool getCanBeUsedToHeal() const;
+
+		unsigned int getHealAmount() const;
+
+		void removeHealAmount();
+
+		unsigned int getScoreWhenEquipped() const;
+
+		void removeScoreWhenEquipped();
 
 		Item* getRequiredParentWhenEquipping() const;
 
@@ -33,7 +41,7 @@ class Item : public Entity
 
 		bool canBeEquipped = true;
 
-		bool canBeUsedToAttack = false;
+		unsigned int healAmount = 0;
 
 		unsigned int attackDamage = 0;
 

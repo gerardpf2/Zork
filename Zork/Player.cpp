@@ -212,6 +212,7 @@ void Player::take(const vector<string>& tokens)
 					{
 						item->assignNewParent(requiredItemParent);
 						incrementScore(item->getScoreWhenEquipped());
+						item->removeScoreWhenEquipped();
 						cout << "You take " << name << ". It is added to " << requiredItemParent->getName() << "." << endl;
 					}
 					else cout << "You need " << requiredItemParent->getName() << " in order to take " << name << "." << endl;
@@ -220,6 +221,7 @@ void Player::take(const vector<string>& tokens)
 				{
 					item->assignNewParent((Entity*)this);
 					incrementScore(item->getScoreWhenEquipped());
+					item->removeScoreWhenEquipped();
 					cout << "You take " << name << "." << endl;
 				}
 			}
@@ -364,6 +366,47 @@ void Player::projectile(const vector<string>& tokens)
 	else cout << itemName << " is not in your inventory." << endl;
 }
 
+void Player::heal(const vector<string>& tokens)
+{
+	// 2 parameters (_item_)
+
+	assert(tokens.size() == 2);
+
+	if(!getInCombat())
+	{
+		cout << "You are not in a battle." << endl;
+		return;
+	}
+
+	string itemName = tokens[1];
+	Entity* entityItem = getChild(EntityType::ITEM, itemName.c_str(), true);
+
+	if(entityItem)
+	{
+		Item* item = (Item*)entityItem;
+
+		if(item->getCanBeUsedToHeal())
+		{
+			if(canIncrementHealth())
+			{
+				if(canDoAction())
+				{
+					incrementHealth(item->getHealAmount());
+					item->removeHealAmount();
+
+					doAction();
+
+					cout << "You used " << itemName << " to heal." << endl;
+				}
+				else cout << "You are tired." << endl;
+			}
+			else cout << "Your health is full." << endl;
+		}
+		else cout << itemName << " cannot be used to heal." << endl;
+	}
+	else cout << itemName << " is not in your inventory." << endl;
+}
+
 void Player::move(const vector<string>& tokens)
 {
 	// 1 parameter (_combatDirection_)
@@ -377,26 +420,24 @@ void Player::move(const vector<string>& tokens)
 	}
 
 	string name = tokens[1];
+	CombatDirectionType combatDirectionType;
 
-	int rowIncrement = 0;
-	int columnIncrement = 0;
-
-	if(name == "u" || name == "up" || name == "Up") rowIncrement = -1;
-	else if(name == "d" || name == "down" || name == "Down") rowIncrement = 1;
-	else if(name == "l" || name == "left" || name == "Left") columnIncrement = -1;
-	else if(name == "r" || name == "right" || name == "Right") columnIncrement = 1;
+	if(name == "u" || name == "up" || name == "Up") combatDirectionType = CombatDirectionType::UP;
+	else if(name == "d" || name == "down" || name == "Down") combatDirectionType = CombatDirectionType::DOWN;
+	else if(name == "l" || name == "left" || name == "Left") combatDirectionType = CombatDirectionType::LEFT;
+	else if(name == "r" || name == "right" || name == "Right") combatDirectionType = CombatDirectionType::RIGHT;
 	else
 	{
 		cout << "Combat direction " << name << " does not exist." << endl;
 		return;
 	}
 
-	if(combatSystem->canMovePlayer(rowIncrement, columnIncrement))
+	if(combatSystem->canMovePlayer(combatDirectionType))
 	{
 		if(canDoAction())
 		{
 			doAction();
-			combatSystem->movePlayer(rowIncrement, columnIncrement);
+			combatSystem->movePlayer(combatDirectionType);
 			cout << "You move to " << name << "." << endl;
 		}
 		else cout << "You are tired." << endl;

@@ -17,6 +17,10 @@ class Creature : public Entity
 
 		void takeDamage(unsigned int amount = 1);
 
+		bool canIncrementHealth() const;
+
+		void incrementHealth(unsigned int amount);
+
 		bool getInCombat() const;
 
 		void setInCombat(bool inCombat);
@@ -40,6 +44,8 @@ class Creature : public Entity
 	private:
 
 		int health = -1;
+
+		int maxHealth = -1;
 
 		bool alive = false;
 

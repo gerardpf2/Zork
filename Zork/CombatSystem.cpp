@@ -30,24 +30,33 @@ void CombatSystem::setCommandListener(CommandListener* commandListener)
 	this->commandListener = commandListener;
 }
 
-bool CombatSystem::canMovePlayer(int rowIncrement, int columnIncrement) const
+bool CombatSystem::canMovePlayer(CombatDirectionType combatDirectionType) const
 {
+	int rowIncrement, columnIncrement;
+	getRowColumnIncrement(combatDirectionType, rowIncrement, columnIncrement);
+
 	int playerNextRow = playerRow + rowIncrement;
 	int playerNextColumn = playerColumn + columnIncrement;
 	
 	return abs(rowIncrement) + abs(columnIncrement) == 1 && (playerNextRow != enemyRow || playerNextColumn != enemyColumn) && playerNextRow >= 0 && playerNextRow < rows && playerNextColumn >= 0 && playerNextColumn < columns;
 }
 
-bool CombatSystem::canMoveEnemy(int rowIncrement, int columnIncrement) const
+bool CombatSystem::canMoveEnemy(CombatDirectionType combatDirectionType) const
 {
+	int rowIncrement, columnIncrement;
+	getRowColumnIncrement(combatDirectionType, rowIncrement, columnIncrement);
+
 	int enemyNextRow = enemyRow + rowIncrement;
 	int enemyNextColumn = enemyColumn + columnIncrement;
 
 	return abs(rowIncrement) + abs(columnIncrement) == 1 && (enemyNextRow != playerRow || enemyNextColumn != playerColumn) && enemyNextRow >= 0 && enemyNextRow < rows && enemyNextColumn >= 0 && enemyNextColumn < columns;
 }
 
-void CombatSystem::movePlayer(int rowIncrement, int columnIncrement)
+void CombatSystem::movePlayer(CombatDirectionType combatDirectionType)
 {
+	int rowIncrement, columnIncrement;
+	getRowColumnIncrement(combatDirectionType, rowIncrement, columnIncrement);
+
 	int playerNextRow = playerRow + rowIncrement;
 	int playerNextColumn = playerColumn + columnIncrement;
 
@@ -62,8 +71,11 @@ void CombatSystem::movePlayer(int rowIncrement, int columnIncrement)
 	printBattlefield();
 }
 
-void CombatSystem::moveEnemy(int rowIncrement, int columnIncrement)
+void CombatSystem::moveEnemy(CombatDirectionType combatDirectionType)
 {
+	int rowIncrement, columnIncrement;
+	getRowColumnIncrement(combatDirectionType, rowIncrement, columnIncrement);
+
 	int enemyNextRow = enemyRow + rowIncrement;
 	int enemyNextColumn = enemyColumn + columnIncrement;
 
@@ -172,10 +184,10 @@ bool CombatSystem::playerMissProjectile() const
 	return (float)rand() / (float)RAND_MAX <= 0.4f;
 }
 
-void CombatSystem::enemyFindMove(int& rowIncrement, int& columnIncrement) const
+CombatDirectionType CombatSystem::enemyFindMove() const
 {
-	rowIncrement = 0;
-	columnIncrement = 0;
+	int rowIncrement = 0;
+	int columnIncrement = 0;
 
 	if(enemyRow == playerRow)
 	{
@@ -212,6 +224,8 @@ void CombatSystem::enemyFindMove(int& rowIncrement, int& columnIncrement) const
 			else columnIncrement = 1; */
 		}
 	}
+
+	return getCombatDirectionType(rowIncrement, columnIncrement);
 }
 
 bool CombatSystem::playerFacingEnemy() const
@@ -332,4 +346,41 @@ void CombatSystem::printBattlefield() const
 	battlefield.replace(directionEnemyPosition, 1, directionEnemyChar);
 
 	commandListener->printDynamic(battlefield);
+}
+
+void CombatSystem::getRowColumnIncrement(CombatDirectionType combatDirectionType, int& rowIncrement, int& columnIncrement) const
+{
+	switch(combatDirectionType)
+	{
+		case CombatDirectionType::UP:
+			rowIncrement = -1;
+			columnIncrement = 0;
+
+			break;
+		case CombatDirectionType::DOWN:
+			rowIncrement = 1;
+			columnIncrement = 0;
+
+			break;
+		case CombatDirectionType::LEFT:
+			rowIncrement = 0;
+			columnIncrement = -1;
+
+			break;
+		case CombatDirectionType::RIGHT:
+			rowIncrement = 0;
+			columnIncrement = 1;
+
+			break;
+	}
+}
+
+CombatDirectionType CombatSystem::getCombatDirectionType(int rowIncrement, int columnIncrement) const
+{
+	assert(abs(rowIncrement) + abs(columnIncrement) == 1);
+
+	if(rowIncrement == 0)
+		return columnIncrement < 0 ? CombatDirectionType::LEFT : CombatDirectionType::RIGHT;
+
+	return rowIncrement < 0 ? CombatDirectionType::UP : CombatDirectionType::DOWN;
 }

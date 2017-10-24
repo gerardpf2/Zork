@@ -126,6 +126,7 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 			else if(action == "drop" || action == "d") player->drop(tokens);
 			else if(action == "attack" || action == "a") player->attack(tokens);
 			else if(action == "projectile" || action == "pr") player->projectile(tokens);
+			else if(action == "heal" || action == "h") player->heal(tokens);
 			else if(action == "move" || action == "m") player->move(tokens);
 			else if(action == "rotate" || action == "r") player->rotate(tokens);
 			else commandOk = false;
@@ -191,6 +192,8 @@ void CommandListener::printCommands() const
 	cout << "\tThe player attacks the enemy using the specified item. The item must be\n\towned by the player. _item_ is an ingame name." << endl;
 	cout << "(combat mode) projectile, pr _item_" << endl;
 	cout << "\tThe player throws the specified item to the enemy. The item must be owned\n\tby the player. The item is dropped. _item_ is an ingame name." << endl;
+	cout << "(combat mode) heal, h _item_" << endl;
+	cout << "\tThe player heals using the specified item. The item must be\n\towned by the player. _item_ is an ingame name." << endl;
 	cout << "(combat mode) move, m _combatDirection_" << endl;
 	cout << "\tThe player moves in the specified direction. _combatDirection_ can be: 'u',\n\t'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl;
 	cout << "(combat mode) rotate, r _combatDirection_" << endl;

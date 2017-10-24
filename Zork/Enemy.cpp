@@ -58,14 +58,11 @@ void Enemy::update(clock_t msDeltaTime)
 		{
 			if(combatSystem->enemyFacingPlayer() || combatSystem->enemyRotationSame())
 			{
-				int rowIncrement = 0;
-				int columnIncrement = 0;
+				CombatDirectionType combatDirectionType = combatSystem->enemyFindMove();
 
-				combatSystem->enemyFindMove(rowIncrement, columnIncrement);
-
-				if(combatSystem->canMoveEnemy(rowIncrement, columnIncrement))
+				if(combatSystem->canMoveEnemy(combatDirectionType))
 				{
-					combatSystem->moveEnemy(rowIncrement, columnIncrement);
+					combatSystem->moveEnemy(combatDirectionType);
 
 					string text = getName();
 					text += " moves.";

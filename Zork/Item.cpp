@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <iostream>
 
-Item::Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, bool canBeUsedToAttack, unsigned int attackDamage, unsigned int projectileDamage, Item* requiredParentWhenEquipping) :
-	Entity(name, description, EntityType::ITEM, parent), scoreWhenEquipped(scoreWhenEquipped), canBeUsedToAttack(canBeUsedToAttack), attackDamage(attackDamage), projectileDamage(projectileDamage), requiredParentWhenEquipping(requiredParentWhenEquipping)
+Item::Item(const char* name, const char* description, Entity* parent, unsigned int scoreWhenEquipped, unsigned int attackDamage, unsigned int projectileDamage, unsigned int healAmount, Item* requiredParentWhenEquipping) :
+	Entity(name, description, EntityType::ITEM, parent), scoreWhenEquipped(scoreWhenEquipped), attackDamage(attackDamage), projectileDamage(projectileDamage), healAmount(healAmount), requiredParentWhenEquipping(requiredParentWhenEquipping)
 {
 	assert(parent);
 }
@@ -24,7 +24,7 @@ void Item::setCanBeEquipped(bool canBeEquipped)
 
 bool Item::getCanBeUsedToAttack() const
 {
-	return canBeUsedToAttack;
+	return attackDamage > 0;
 }
 
 unsigned int Item::getAttackDamage() const
@@ -37,13 +37,29 @@ unsigned int Item::getProjectileDamage() const
 	return projectileDamage;
 }
 
-unsigned int Item::getScoreWhenEquipped()
+bool Item::getCanBeUsedToHeal() const
 {
-	unsigned int score = scoreWhenEquipped;
+	return healAmount > 0;
+}
 
-	scoreWhenEquipped = 0; // Avoid incrementing score multiple times (t, d, t, d, ...)
+unsigned int Item::getHealAmount() const
+{
+	return healAmount;
+}
 
-	return score;
+void Item::removeHealAmount()
+{
+	healAmount = 0;
+}
+
+unsigned int Item::getScoreWhenEquipped() const
+{
+	return scoreWhenEquipped;
+}
+
+void Item::removeScoreWhenEquipped()
+{
+	scoreWhenEquipped = 0;
 }
 
 Item* Item::getRequiredParentWhenEquipping() const

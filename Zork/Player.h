@@ -41,6 +41,8 @@ class Player : public Creature
 
 		void projectile(const vector<string>& tokens);
 
+		void heal(const vector<string>& tokens);
+
 		void move(const vector<string>& tokens);
 
 		void rotate(const vector<string>& tokens);
