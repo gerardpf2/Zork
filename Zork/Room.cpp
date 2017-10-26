@@ -1,6 +1,5 @@
 #include "Room.h"
 
-#include "Exit.h"
 #include <iostream>
 
 Room::Room(const char* name, const char* description) :

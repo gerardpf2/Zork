@@ -16,11 +16,11 @@ class Enemy : public Creature
 
 		void setCommandListener(CommandListener* commandListener);
 
-		void update(clock_t msDeltaTime) override;
+		virtual void update(clock_t msDeltaTime) override;
 
 	private:
 
-		void die() override;
+		virtual void die() const override;
 
 	private:
 

@@ -49,11 +49,11 @@ class CombatSystem
 
 		bool playerMissProjectile() const;
 
-		CombatDirectionType enemyFindMove() const;
-
 		bool playerFacingEnemy() const;
 
 		bool enemyFacingPlayer() const;
+
+		CombatDirectionType enemyFindMove() const;
 
 		CombatDirectionType enemyFindRotation() const;
 
@@ -63,9 +63,9 @@ class CombatSystem
 
 	private:
 
-		void getRowColumnIncrement(CombatDirectionType combatDirectionType, int& rowIncrement, int& columnIncrement) const;
-
 		CombatDirectionType getCombatDirectionType(int rowIncrement, int columnIncrement) const;
+
+		void getRowColumnIncrement(CombatDirectionType combatDirectionType, int& rowIncrement, int& columnIncrement) const;
 
 	private:
 

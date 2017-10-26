@@ -132,6 +132,9 @@ void Entity::lockItems(bool lock, bool recursive) const
 	}
 }
 
+void Entity::update(clock_t msDeltaTime)
+{ }
+
 void Entity::addChild(Entity* child)
 {
 	assert(child);
@@ -147,9 +150,6 @@ void Entity::removeChild(Entity* child)
 
 	children[(unsigned int)child->getEntityType()].remove(child);
 }
-
-void Entity::update(clock_t msDeltaTime)
-{ }
 
 // --- Actions ---
 

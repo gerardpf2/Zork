@@ -39,9 +39,9 @@ class CommandListener
 
 		void printCommands() const;
 
-		void removeCharacters(unsigned int amount);
-
 		void printCommandEnding() const;
+
+		void removeCharacters(unsigned int amount);
 
 	private:
 

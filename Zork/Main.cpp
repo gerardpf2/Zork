@@ -23,12 +23,12 @@ int main()
 		commandListener.listen(stop); // stop is updated
 		world.update();
 
-		if(!world.getPlayer()->isAlive()) // Condition defeat
+		if(!world.getPlayer()->isAlive()) // Defeat condition
 		{
 			cout << "DEFEAT..." << endl;
 			commandListener.process("quit", stop);
 		}
-		else if(world.getPlayer()->getChild(EntityType::ITEM, "Treasure", true)) // Condition victory
+		else if(world.getPlayer()->getChild(EntityType::ITEM, "Treasure", true)) // Victory condition
 		{
 			cout << "VICTORY!" << endl;
 			commandListener.process("quit", stop);

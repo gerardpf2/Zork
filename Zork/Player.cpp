@@ -37,6 +37,11 @@ void Player::incrementMoves(unsigned int amount)
 	moves += amount;
 }
 
+void Player::die() const
+{
+	cout << "You lose." << endl;
+}
+
 // --- Actions ---
 
 void Player::look() const
@@ -284,6 +289,7 @@ void Player::attack(const vector<string>& tokens)
 							Enemy* enemy = (Enemy*)entityEnemy;
 
 							enemy->takeDamage(item->getAttackDamage());
+							cout << "You attack " << enemy->getName() << " using " << itemName << ". " << enemy->getName() << " loses " << item->getAttackDamage() << " hp." << endl;
 
 							if(!enemy->isAlive())
 							{
@@ -344,6 +350,7 @@ void Player::projectile(const vector<string>& tokens)
 						Enemy* enemy = (Enemy*)entityEnemy;
 
 						enemy->takeDamage(item->getProjectileDamage());
+						cout << "You attack " << enemy->getName() << " using " << itemName << " as a projectile. " << enemy->getName() << " loses " << item->getProjectileDamage() << " hp." << endl;
 
 						if(!enemy->isAlive())
 						{
@@ -391,12 +398,11 @@ void Player::heal(const vector<string>& tokens)
 			{
 				if(canDoAction())
 				{
-					incrementHealth(item->getHealAmount());
+					unsigned int amountHealed = incrementHealth(item->getHealAmount());
 					item->removeHealAmount();
+					cout << "You heal for " << amountHealed << " using " << itemName << "." << endl;
 
 					doAction();
-
-					cout << "You used " << itemName << " to heal." << endl;
 				}
 				else cout << "You are tired." << endl;
 			}
@@ -527,9 +533,4 @@ void Player::place(const vector<string>& tokens) const
 		else cout << "Both items are the same." << endl;
 	}
 	else cout << name << " is not in your inventory." << endl;
-}
-
-void Player::die()
-{
-	cout << "You lose." << endl;
 }

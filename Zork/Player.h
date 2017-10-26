@@ -23,7 +23,7 @@ class Player : public Creature
 
 		// --- Actions ---
 
-		void look() const override;
+		virtual void look() const override;
 
 		void look(const vector<string>& tokens) const;
 
@@ -51,7 +51,7 @@ class Player : public Creature
 
 	private:
 
-		void die() override;
+		virtual void die() const override;
 
 	private:
 

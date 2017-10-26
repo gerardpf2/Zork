@@ -2,9 +2,9 @@
 
 #include <conio.h>
 #include <sstream>
-#include <iostream>
-#include <assert.h>
 #include "Player.h"
+#include <assert.h>
+#include <iostream>
 
 CommandListener::CommandListener(Player* player) :
 	player(player)
@@ -30,10 +30,8 @@ void CommandListener::listen(bool& stop)
 		{
 			key = _getch();
 
-			// Arrow Up
-			if(key == 72) printPreviousHistoryItem();
-			// Arrow Down
-			else if(key == 80) printNextHistoryItem();
+			if(key == 72) printPreviousHistoryItem(); // Arrow Up
+			else if(key == 80) printNextHistoryItem(); // Arrow Down
 		}
 		else if(key != '\r')
 		{

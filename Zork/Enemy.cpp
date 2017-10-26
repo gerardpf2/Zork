@@ -21,8 +21,6 @@ void Enemy::setCommandListener(CommandListener* commandListener)
 	this->commandListener = commandListener;
 }
 
-#include <iostream>
-
 void Enemy::update(clock_t msDeltaTime)
 {
 	Creature::update(msDeltaTime);
@@ -42,7 +40,7 @@ void Enemy::update(clock_t msDeltaTime)
 					((Player*)players->front())->takeDamage(1);
 
 				string text = getName();
-				text += " attacks you!";
+				text += " attacks you! You lose 1 hp.";
 
 				commandListener->printDynamic(text, true);
 			}
@@ -65,7 +63,7 @@ void Enemy::update(clock_t msDeltaTime)
 					combatSystem->moveEnemy(combatDirectionType);
 
 					string text = getName();
-					text += " moves.";
+					text += " moves trying to catch you.";
 
 					commandListener->printDynamic(text, true);
 				}
@@ -79,7 +77,7 @@ void Enemy::update(clock_t msDeltaTime)
 					combatSystem->rotateEnemy(combatDirectionType);
 
 					string text = getName();
-					text += " rotates.";
+					text += " rotates trying to see you.";
 
 					commandListener->printDynamic(text, true);
 				}
@@ -90,7 +88,7 @@ void Enemy::update(clock_t msDeltaTime)
 	}
 }
 
-void Enemy::die()
+void Enemy::die() const
 {
 	lockItems(false, true);
 }

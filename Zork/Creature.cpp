@@ -39,11 +39,14 @@ bool Creature::canIncrementHealth() const
 	return health < maxHealth;
 }
 
-void Creature::incrementHealth(unsigned int amount)
+unsigned int Creature::incrementHealth(unsigned int amount)
 {
-	health += amount;
+	unsigned int amountHealed = maxHealth - health;
+	if(amountHealed > amount) amountHealed = amount;
 
-	if(health > maxHealth) health = maxHealth;
+	health += amountHealed;
+
+	return amountHealed;
 }
 
 bool Creature::getInCombat() const
@@ -78,7 +81,7 @@ void Creature::update(clock_t msDeltaTime)
 	}
 }
 
-void Creature::die()
+void Creature::die() const
 { }
 
 // --- Actions ---

@@ -19,7 +19,7 @@ class Creature : public Entity
 
 		bool canIncrementHealth() const;
 
-		void incrementHealth(unsigned int amount);
+		unsigned int incrementHealth(unsigned int amount);
 
 		bool getInCombat() const;
 
@@ -39,7 +39,7 @@ class Creature : public Entity
 
 		Creature(const char* name, const char* description, EntityType entityType, Room* room, int health, int msNextAction, int currentMsNextAction = 0);
 
-		virtual void die();
+		virtual void die() const;
 
 	private:
 

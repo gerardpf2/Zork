@@ -9,6 +9,8 @@
 
 World::World()
 {
+	srand((unsigned int)time(nullptr));
+
 	lastUpdateTime = clock();
 
 	Room* room0 = new Room("Room0", "Description Room0");
@@ -19,24 +21,16 @@ World::World()
 
 	combatSystem = new CombatSystem(5, 5, 4, 2, CombatDirectionType::UP, 0, 2, CombatDirectionType::DOWN, 6, 4);
 
-	enemy = new Enemy("Enemy", "Description Enemy", room0, combatSystem, 1);
+	enemy = new Enemy("Enemy", "Description Enemy", room4, combatSystem, 10);
 	player = new Player("Player", "Description Player", room0, combatSystem, 5);
 
 	Item* boat = new Item("Boat", "Description Boat", room0, 10, 0, 2, 0);
-	Item* sword = new Item("Sword", "Description Sword", player, 5, 1, 1, 0);
-	Item* coconut = new Item("Coconut", "Description Coconut", room0, 5, 0, 1, 1);
-	Item* oar = new Item("Oar", "Description Oar", room0, 10, 0, 1, 0, boat);
-	Item* sail = new Item("Sail", "Description Sail", room0, 10, 0, 1, 0, boat);
-	Item* shell = new Item("Shell", "Description Shell", room0, 5, 0, 1, 0);
+	Item* sword = new Item("Sword", "Description Sword", room1, 5, 1, 1, 0);
+	Item* coconut = new Item("Coconut", "Description Coconut", room1, 5, 0, 1, 1);
+	Item* oar = new Item("Oar", "Description Oar", room2, 10, 0, 1, 0, boat);
+	Item* sail = new Item("Sail", "Description Sail", room3, 10, 0, 1, 0, boat);
+	Item* shell = new Item("Shell", "Description Shell", room2, 5, 0, 1, 0);
 	Item* treasure = new Item("Treasure", "Description Treasure", enemy, 100, 0, 1, 0);
-
-	/* Item* boat = new Item("Boat", "Description Boat", room0);
-	Item* sword = new Item("Sword", "Description Sword", room1);
-	Item* shield = new Item("Shield", "Description Shield", room2);
-	Item* oar = new Item("Oar", "Description Oar", room2, boat);
-	Item* sail = new Item("Sail", "Description Sail", room3, boat);
-	Item* shell = new Item("Shell", "Description Shell", room4);
-	Item* treasure = new Item("Treasure", "Description Treasure", enemy); */
 
 	Exit* exit01 = new Exit("Description Exit01", DirectionType::NORTH, room0, room1, { boat });
 	Exit* exit10 = new Exit("Description Exit10", DirectionType::SOUTH, room1, room0, { boat });
@@ -81,7 +75,7 @@ World::World()
 	entities.push_back(enemy);
 	entities.push_back(player);
 
-	if(enemy->isAlive()) enemy->lockItems(true, true);
+	if(enemy->isAlive()) enemy->lockItems(true, true); // Player cannot take Enemy items
 }
 
 World::~World()
