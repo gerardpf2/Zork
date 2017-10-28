@@ -52,17 +52,20 @@ void CommandListener::listen(bool& stop)
 	}
 }
 
-void CommandListener::printHelloMessage() const
+void CommandListener::printHelloMessage()
 {
-	cout << "Welcome!" << endl;
-	cout << "Type 'commands' or 'c' in order to see all existing commands." << endl;
-	printCommandEnding();
+	string helloMessage = "Welcome!\n\n";
+	helloMessage += "You are a pirate and your best treasure has been stolen. You have to recover it... and you know where to find the one that owns it right now. An epic battle awaits you, so be brave!\n\n";
+	helloMessage += "Type 'commands' or 'c' in order to see all existing commands.";
+
+	printDynamic(helloMessage, true);
 }
 
-void CommandListener::printGoodbyeMessage() const
+void CommandListener::printGoodbyeMessage()
 {
-	cout << "Thanks for playing. Goodbye!" << endl;
-	printCommandEnding();
+	string goodbyeMessage = "Thanks for playing. Goodbye!";
+
+	printDynamic(goodbyeMessage, true);
 }
 
 void CommandListener::printDynamic(const string& text, bool ending)
@@ -169,33 +172,33 @@ void CommandListener::printNextHistoryItem()
 void CommandListener::printCommands() const
 {
 	cout << "quit, q" << endl;
-	cout << "\tQuits the game." << endl;
+	cout << "\tQuits the game." << endl << endl;
 	cout << "commands, c" << endl;
-	cout << "\tDisplays all the commands." << endl;
+	cout << "\tDisplays all the commands." << endl << endl;
 	cout << "battle, b" << endl;
-	cout << "\tStarts a battle. The player and the enemy must be in the same room." << endl;
+	cout << "\tStarts a battle. The player and the enemy must be in the same room." << endl << endl;
 	cout << "inventory, i" << endl;
-	cout << "\tDisplays all the items that the player owns." << endl;
+	cout << "\tDisplays all the items that the player owns." << endl << endl;
 	cout << "look, l ['me', _item_ or _enemy_]" << endl;
-	cout << "\tShows information about the specified entity. Parameters are optional.\n\t'me' refers to the player itself. _item_ and _enemy_ are ingame names." << endl;
+	cout << "\tShows information about the specified entity. Parameters are optional. 'me' refers to the player itself. _item_ and _enemy_ are ingame names." << endl << endl;
 	cout << "go, g _direction_" << endl;
-	cout << "\tThe player goes to another room. _direction_ can be: 'n', 's', 'e',\n\t'w', 'ne', 'nw', 'se' or 'sw'. 'north' and 'North' are valid too (and so on)." << endl;
+	cout << "\tThe player goes to another room. _direction_ can be: 'n', 's', 'e', 'w', 'ne', 'nw', 'se' or 'sw'. 'north' and 'North' are valid too (and so on)." << endl << endl;
 	cout << "take, t _item_" << endl;
-	cout << "\tThe player takes an item. The player and the item must be in the same\n\troom. The item must not be owned by the player. _item_ is an ingame name." << endl;
+	cout << "\tThe player takes an item. The player and the item must be in the same room. The item must not be owned by the player. _item_ is an ingame name." << endl << endl;
 	cout << "drop, d _item_" << endl;
-	cout << "\tThe player drops an item. The item must be owned by the player. _item_\n\tis an ingame name." << endl;
+	cout << "\tThe player drops an item. The item must be owned by the player. _item_ is an ingame name." << endl << endl;
 	cout << "place, p _item_ _item_" << endl;
-	cout << "\tThe player places an item inside another one. Both must be owned by the\n\tplayer. _item_ is an ingame name." << endl;
+	cout << "\tThe player places an item inside another one. Both must be owned by the player. _item_ is an ingame name." << endl << endl;
 	cout << "(combat mode) attack, a _item_" << endl;
-	cout << "\tThe player attacks the enemy using the specified item. The item must be\n\towned by the player. _item_ is an ingame name." << endl;
+	cout << "\tThe player attacks the enemy using the specified item. The item must be owned by the player. _item_ is an ingame name." << endl << endl;
 	cout << "(combat mode) projectile, pr _item_" << endl;
-	cout << "\tThe player throws the specified item to the enemy. The item must be owned\n\tby the player. The item is dropped. _item_ is an ingame name." << endl;
+	cout << "\tThe player throws the specified item to the enemy. The item must be owned by the player. The item is dropped. _item_ is an ingame name." << endl << endl;
 	cout << "(combat mode) heal, h _item_" << endl;
-	cout << "\tThe player heals using the specified item. The item must be\n\towned by the player. _item_ is an ingame name." << endl;
+	cout << "\tThe player heals using the specified item. The item must be owned by the player. _item_ is an ingame name." << endl << endl;
 	cout << "(combat mode) move, m _combatDirection_" << endl;
-	cout << "\tThe player moves in the specified direction. _combatDirection_ can be: 'u',\n\t'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl;
+	cout << "\tThe player moves in the specified direction. _combatDirection_ can be: 'u', 'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl << endl;
 	cout << "(combat mode) rotate, r _combatDirection_" << endl;
-	cout << "\tThe player rotates in the specified direction. _combatDirection_ can be: 'u',\n\t'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl;
+	cout << "\tThe player rotates in the specified direction. _combatDirection_ can be: 'u', 'd', 'l' or 'r'. 'up' and 'Up' are valid too (and so on)." << endl << endl;
 }
 
 void CommandListener::printCommandEnding() const

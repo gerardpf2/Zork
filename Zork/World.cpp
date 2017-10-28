@@ -9,38 +9,38 @@
 
 World::World()
 {
-	srand((unsigned int)time(nullptr));
+	srand((unsigned int)time(nullptr)); // CombatSystem hit/miss
 
 	lastUpdateTime = clock();
 
-	Room* room0 = new Room("Room0", "Description Room0");
-	Room* room1 = new Room("Room1", "Description Room1");
-	Room* room2 = new Room("Room2", "Description Room2");
-	Room* room3 = new Room("Room3", "Description Room3");
-	Room* room4 = new Room("Room4", "Description Room4");
+	Room* room0 = new Room("Turtle Island", "You are on a peaceful turtle-shaped island.");
+	Room* room1 = new Room("Rum Island", "It seems that a battle has taken place right here... Maybe you can find a weapon around.");
+	Room* room2 = new Room("Pearl Island", "You are on a very nice island. You can see some bright spots here and there.");
+	Room* room3 = new Room("Parrot Island", "Really strong flows of water can be seen near here.");
+	Room* room4 = new Room("Pirate Island", "You are on the island frequented by the most dangerous pirates.");
 
 	combatSystem = new CombatSystem(5, 5, 4, 2, CombatDirectionType::UP, 0, 2, CombatDirectionType::DOWN, 6, 4);
 
-	enemy = new Enemy("Enemy", "Description Enemy", room4, combatSystem, 10);
-	player = new Player("Player", "Description Player", room0, combatSystem, 5);
+	enemy = new Enemy("Enemy", "He is a very strong pirate. And he has stolen your treasure!", room4, combatSystem, 10);
+	player = new Player("Player", "You are a tiny but brave pirate.", room0, combatSystem, 5);
 
-	Item* boat = new Item("Boat", "Description Boat", room0, 10, 0, 2, 0);
-	Item* sword = new Item("Sword", "Description Sword", room1, 5, 1, 1, 0);
-	Item* coconut = new Item("Coconut", "Description Coconut", room1, 5, 0, 1, 1);
-	Item* oar = new Item("Oar", "Description Oar", room2, 10, 0, 1, 0, boat);
-	Item* sail = new Item("Sail", "Description Sail", room3, 10, 0, 1, 0, boat);
-	Item* shell = new Item("Shell", "Description Shell", room2, 5, 0, 1, 0);
-	Item* treasure = new Item("Treasure", "Description Treasure", enemy, 100, 0, 1, 0);
+	Item* boat = new Item("Boat", "It is an old and half broken wooden boat.", room0, 10, 0, 2, 0);
+	Item* sword = new Item("Sword", "It is a weak sword but it can still be used.", room1, 5, 1, 1, 0);
+	Item* coconut = new Item("Coconut", "Small but delicious coconut. Probably you can use it once if you are hurt.", room1, 5, 0, 1, 2);
+	Item* shell = new Item("Shell", "It is nice but apparently not very useful.", room2, 5, 0, 1, 0);
+	Item* oar = new Item("Oar", "It is a wooden oar, and it can be used to improve your boat.", room2, 10, 0, 1, 0, boat);
+	Item* sail = new Item("Sail", "It has some holes but it can still be used in a boat.", room3, 10, 0, 1, 0, boat);
+	Item* treasure = new Item("Treasure", "YOUR treasure!", enemy, 100, 0, 1, 0);
 
-	Exit* exit01 = new Exit("Description Exit01", DirectionType::NORTH, room0, room1, { boat });
-	Exit* exit10 = new Exit("Description Exit10", DirectionType::SOUTH, room1, room0, { boat });
-	Exit* exit02 = new Exit("Description Exit02", DirectionType::SOUTH, room0, room2, { boat });
-	Exit* exit20 = new Exit("Description Exit20", DirectionType::NORTH, room2, room0, { boat });
-	Exit* exit13 = new Exit("Description Exit13", DirectionType::SOUTHEAST, room1, room3, { boat });
-	Exit* exit31 = new Exit("Description Exit31", DirectionType::NORTHWEST, room3, room1, { boat });
-	Exit* exit23 = new Exit("Description Exit23", DirectionType::NORTHEAST, room2, room3, { boat });
-	Exit* exit32 = new Exit("Description Exit32", DirectionType::SOUTHWEST, room3, room2, { boat });
-	Exit* exit34 = new Exit("Description Exit34", DirectionType::EAST, room3, room4, { boat, sail, oar });
+	Exit* exit01 = new Exit("North. Calm water flow. You need a boat.", DirectionType::NORTH, room0, room1, { boat });
+	Exit* exit10 = new Exit("South. Calm water flow. You need a boat.", DirectionType::SOUTH, room1, room0, { boat });
+	Exit* exit02 = new Exit("South. Calm water flow. You need a boat.", DirectionType::SOUTH, room0, room2, { boat });
+	Exit* exit20 = new Exit("North. Calm water flow. You need a boat.", DirectionType::NORTH, room2, room0, { boat });
+	Exit* exit13 = new Exit("Southeast. Calm water flow. You need a boat.", DirectionType::SOUTHEAST, room1, room3, { boat });
+	Exit* exit31 = new Exit("Northwest. Calm water flow. You need a boat.", DirectionType::NORTHWEST, room3, room1, { boat });
+	Exit* exit23 = new Exit("Northeast. Calm water flow. You need a boat.", DirectionType::NORTHEAST, room2, room3, { boat });
+	Exit* exit32 = new Exit("Southwest. Calm water flow. You need a boat.", DirectionType::SOUTHWEST, room3, room2, { boat });
+	Exit* exit34 = new Exit("East. Really strong water flow. You need a boat, an oar and a sail.", DirectionType::EAST, room3, room4, { boat, sail, oar });
 
 	entities.reserve(23);
 

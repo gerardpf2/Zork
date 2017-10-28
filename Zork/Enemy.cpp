@@ -6,7 +6,7 @@
 #include "CommandListener.h"
 
 Enemy::Enemy(const char* name, const char* description, Room* room, CombatSystem* combatSystem, int health) :
-	Creature(name, description, EntityType::ENEMY, room, health, 4000, 2000), combatSystem(combatSystem)
+	Creature(name, description, EntityType::ENEMY, room, health, 5000, 2500), combatSystem(combatSystem)
 {
 	assert(combatSystem);
 }
@@ -63,7 +63,7 @@ void Enemy::update(clock_t msDeltaTime)
 					combatSystem->moveEnemy(combatDirectionType);
 
 					string text = getName();
-					text += " moves trying to catch you.";
+					text += " moves trying to get close to you.";
 
 					commandListener->printDynamic(text, true);
 				}

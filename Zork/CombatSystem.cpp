@@ -130,7 +130,7 @@ bool CombatSystem::enemyAttackCanHit() const
 
 bool CombatSystem::playerProjectileCanHit() const
 {
-	return playerRow == enemyRow || playerColumn == enemyColumn && playerFacingEnemy();
+	return (playerRow == enemyRow || playerColumn == enemyColumn) && playerFacingEnemy();
 }
 
 bool CombatSystem::playerMissAttack() const

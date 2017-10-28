@@ -1,0 +1,37 @@
+-- Rooms --
+
+Room0 (Turtle Island) contains:
+   Boat
+
+Room1 (Rum Island) contains:
+   Sword
+   Coconut
+
+Room2 (Pearl Island) contains:
+   Shell
+   Oar
+
+Room3 (Parrot Island) contains:
+   Sail
+
+Room4 (Pirate Island) contains:
+   Treasure (Enemy)
+
+-- Exits --
+
+ExitsA (North, South) needs:
+   Boat
+
+ExitsB (North, South) needs:
+   Boat
+
+ExitsC (Southeast, Northwest) needs:
+   Boat
+
+ExitsD (Northeast, Southwest) needs:
+   Boat
+
+ExitE (East) needs:
+   Boat
+   Sail
+   Oar

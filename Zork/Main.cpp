@@ -25,12 +25,12 @@ int main()
 
 		if(!world.getPlayer()->isAlive()) // Defeat condition
 		{
-			cout << "DEFEAT..." << endl;
+			commandListener.printDynamic("DEFEAT...");
 			commandListener.process("quit", stop);
 		}
 		else if(world.getPlayer()->getChild(EntityType::ITEM, "Treasure", true)) // Victory condition
 		{
-			cout << "VICTORY!" << endl;
+			commandListener.printDynamic("VICTORY!");
 			commandListener.process("quit", stop);
 		}
 	}

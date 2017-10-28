@@ -19,9 +19,9 @@ class CommandListener
 
 		void listen(bool& stop);
 
-		void printHelloMessage() const;
+		void printHelloMessage();
 
-		void printGoodbyeMessage() const;
+		void printGoodbyeMessage();
 
 		void printDynamic(const string& text, bool ending = false);
 
