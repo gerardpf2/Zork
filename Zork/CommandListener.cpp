@@ -72,7 +72,7 @@ void CommandListener::printDynamic(const string& text, bool ending)
 {
 	string tmpPlayerInput = playerInput;
 
-	removeCharacters(tmpPlayerInput.size());
+	removeCharacters((unsigned int)tmpPlayerInput.size());
 
 	cout << text << endl;
 
@@ -107,7 +107,7 @@ bool CommandListener::resolve(const vector<string>& tokens, bool& stop) const
 	bool commandOk = true;
 
 	string action = tokens[0];
-	unsigned int parametersCount = tokens.size() - 1;
+	unsigned int parametersCount = (unsigned int)tokens.size() - 1;
 
 	switch(parametersCount)
 	{
@@ -151,7 +151,7 @@ void CommandListener::printPreviousHistoryItem()
 	{
 		--currentHistoryItem;
 
-		removeCharacters(playerInput.size());
+		removeCharacters((unsigned int)playerInput.size());
 
 		cout << (playerInput = *currentHistoryItem);
 	}
@@ -163,7 +163,7 @@ void CommandListener::printNextHistoryItem()
 	{
 		++currentHistoryItem;
 
-		removeCharacters(playerInput.size());
+		removeCharacters((unsigned int)playerInput.size());
 
 		cout << (playerInput = *currentHistoryItem);
 	}

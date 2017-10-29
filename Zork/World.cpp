@@ -80,7 +80,7 @@ World::World()
 
 World::~World()
 {
-	for(int i = entities.size() - 1; i >= 0; --i)
+	for(int i = (int)entities.size() - 1; i >= 0; --i)
 	{
 		delete entities[i];
 		entities[i] = nullptr;
